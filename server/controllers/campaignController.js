@@ -9,7 +9,7 @@ export const getCampaigns = asyncHandler(async (req, res) => {
     where: { status: 'active' },
   });
 
-  const totalPledges = await prisma.pledge.count();
+  const totalDemands = await prisma.demand.count();
   
   const totalDonations = await prisma.donation.aggregate({
     where: { paymentStatus: 'success' },
@@ -24,7 +24,7 @@ export const getCampaigns = asyncHandler(async (req, res) => {
     success: true, 
     campaigns,
     stats: {
-      totalPledges,
+      totalDemands,
       totalDonations: totalDonations._sum.amount || 0,
       donorsCount
     }

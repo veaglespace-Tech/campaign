@@ -8,7 +8,7 @@ import { config } from '../config/index.js';
 // @route   GET /api/admin/stats
 // @access  Public (Should be private in production)
 export const getStats = asyncHandler(async (req, res) => {
-  const totalPledges = await prisma.pledge.count();
+  const totalDemands = await prisma.demand.count();
   
   const totalDonations = await prisma.donation.aggregate({
     where: { paymentStatus: 'success' },
@@ -22,8 +22,8 @@ export const getStats = asyncHandler(async (req, res) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const todayPledges = await prisma.pledge.count({
-    where: { pledgeDate: { gte: today } }
+  const todayDemands = await prisma.demand.count({
+    where: { demandDate: { gte: today } }
   });
 
   const todayDonations = await prisma.donation.aggregate({
@@ -34,31 +34,31 @@ export const getStats = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     stats: {
-      totalPledges,
+      totalDemands,
       totalDonations: totalDonations._sum.amount || 0,
       donorsCount,
-      certificatesGenerated: totalPledges,
-      todayPledges,
+      certificatesGenerated: totalDemands,
+      todayDemands,
       todayDonations: todayDonations._sum.amount || 0
     }
   });
 });
 
-// @desc    Get all pledges (for table/export)
-// @route   GET /api/admin/pledges
+// @desc    Get all demands (for table/export)
+// @route   GET /api/admin/demands
 // @access  Public
-export const getPledges = asyncHandler(async (req, res) => {
-  const pledges = await prisma.pledge.findMany({
+export const getDemands = asyncHandler(async (req, res) => {
+  const demands = await prisma.demand.findMany({
     include: {
       user: true,
       certificates: true,
       donations: true,
       campaign: true
     },
-    orderBy: { pledgeDate: 'desc' }
+    orderBy: { demandDate: 'desc' }
   });
 
-  res.json({ success: true, pledges });
+  res.json({ success: true, demands });
 });
 
 // @desc    Get admin profile

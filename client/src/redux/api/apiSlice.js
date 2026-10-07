@@ -12,37 +12,37 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Campaign', 'Pledge', 'Admin', 'Config', 'AdminProfile'],
+  tagTypes: ['Campaign', 'Demand', 'Admin', 'Config', 'AdminProfile'],
   endpoints: (builder) => ({
     getCampaigns: builder.query({
       query: () => '/campaigns',
       providesTags: ['Campaign']
     }),
-    createPledge: builder.mutation({
+    createDemand: builder.mutation({
       query: (data) => ({
-        url: '/pledges/create',
+        url: '/demands/create',
         method: 'POST',
         body: data
       }),
-      invalidatesTags: ['Pledge', 'Admin']
+      invalidatesTags: ['Demand', 'Admin']
     }),
     initDonation: builder.mutation({
       query: (data) => ({
-        url: '/pledges/donate/init',
+        url: '/demands/donate/init',
         method: 'POST',
         body: data
       })
     }),
-    completePledge: builder.mutation({
+    completeDemand: builder.mutation({
       query: (data) => ({
-        url: '/pledges/complete',
+        url: '/demands/complete',
         method: 'POST',
         body: data
       }),
-      invalidatesTags: ['Pledge', 'Admin']
+      invalidatesTags: ['Demand', 'Admin']
     }),
     verifyCertificate: builder.query({
-      query: (certId) => `/pledges/verify/${certId}`
+      query: (certId) => `/demands/verify/${certId}`
     }),
     
     // Admin Auth
@@ -66,12 +66,12 @@ export const apiSlice = createApi({
       query: () => '/admin/stats',
       providesTags: ['Admin']
     }),
-    getAdminPledges: builder.query({
+    getAdminDemands: builder.query({
       query: () => ({
-        url: '/admin/pledges',
+        url: '/admin/demands',
         method: 'GET',
       }),
-      providesTags: ['Pledge']
+      providesTags: ['Demand']
     }),
     
     // Config Endpoints
@@ -109,14 +109,14 @@ export const apiSlice = createApi({
 
 export const {
   useGetCampaignsQuery,
-  useCreatePledgeMutation,
+  useCreateDemandMutation,
   useInitDonationMutation,
-  useCompletePledgeMutation,
+  useCompleteDemandMutation,
   useVerifyCertificateQuery,
   useAdminLoginMutation,
   useAdminVerifyOtpMutation,
   useGetAdminStatsQuery,
-  useGetAdminPledgesQuery,
+  useGetAdminDemandsQuery,
   useGetConfigQuery,
   useUpdateConfigMutation,
   useGetAdminProfileQuery,

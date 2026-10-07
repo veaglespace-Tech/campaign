@@ -3,11 +3,11 @@ import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { HeartHandshake, ShieldCheck, Flag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useGetConfigQuery, useCompletePledgeMutation } from '../../redux/api/apiSlice';
-import PledgeForm from '../../components/pledge/PledgeForm';
+import { useGetConfigQuery, useCompleteDemandMutation } from '../../redux/api/apiSlice';
+import DemandForm from '../../components/demand/DemandForm';
 import { useRouter } from 'next/navigation';
 
-function PledgeContent() {
+function DemandContent() {
   const searchParams = useSearchParams();
   const campaignId = searchParams.get('campaignId') || 1;
   
@@ -15,24 +15,24 @@ function PledgeContent() {
   const siteConfig = configData?.config || {};
 
   const [status, setStatus] = useState('idle'); // idle, success
-  const [pledgeId, setPledgeId] = useState(null);
+  const [demandId, setDemandId] = useState(null);
   
-  const [completePledge] = useCompletePledgeMutation();
+  const [completeDemand] = useCompleteDemandMutation();
   const router = useRouter();
   
-  const handlePledgeSuccess = async (id) => {
-    setPledgeId(id);
+  const handleDemandSuccess = async (id) => {
+    setDemandId(id);
     setStatus('success');
     
     try {
-      const res = await completePledge({ pledgeId: id }).unwrap();
+      const res = await completeDemand({ demandId: id }).unwrap();
       if (res.success) {
-        router.push(`/pledge/success?id=${id}&cert=${res.certificateNumber}`);
+        router.push(`/demand/success?id=${id}&cert=${res.certificateNumber}`);
       } else {
-        router.push(`/pledge/success?id=${id}`);
+        router.push(`/demand/success?id=${id}`);
       }
     } catch (error) {
-      router.push(`/pledge/success?id=${id}`);
+      router.push(`/demand/success?id=${id}`);
     }
   };
 
@@ -79,20 +79,20 @@ function PledgeContent() {
           <p className="text-gray-300 text-lg max-w-xl mx-auto drop-shadow-md">Join the movement and download your protest demands certificate.</p>
         </div>
         
-        <PledgeForm 
+        <DemandForm 
           campaignId={campaignId} 
           siteConfig={siteConfig} 
-          onSuccess={handlePledgeSuccess} 
+          onSuccess={handleDemandSuccess} 
         />
       </div>
     </div>
   );
 }
 
-export default function PledgePage() {
+export default function DemandPage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#FFF9F2] flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF9933]"></div></div>}>
-      <PledgeContent />
+      <DemandContent />
     </Suspense>
   );
 }

@@ -9,13 +9,13 @@ export default function AdminDashboard() {
 
   // Mock data for the chart since backend doesn't provide historical data yet
   const chartData = [
-    { name: 'Mon', pledges: 140 },
-    { name: 'Tue', pledges: 230 },
-    { name: 'Wed', pledges: 370 },
-    { name: 'Thu', pledges: 250 },
-    { name: 'Fri', pledges: 580 },
-    { name: 'Sat', pledges: 820 },
-    { name: 'Sun', pledges: stats?.todayPledges || 120 },
+    { name: 'Mon', demands: 140 },
+    { name: 'Tue', demands: 230 },
+    { name: 'Wed', demands: 370 },
+    { name: 'Thu', demands: 250 },
+    { name: 'Fri', demands: 580 },
+    { name: 'Sat', demands: 820 },
+    { name: 'Sun', demands: stats?.todayDemands || 120 },
   ];
 
   if (isLoading) {
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <KPICard 
             title="Total Supporters" 
-            value={stats.totalPledges} 
+            value={stats.totalDemands} 
             icon={Users} 
             color="red" 
             trend="+12%" 
@@ -52,7 +52,7 @@ export default function AdminDashboard() {
           />
           <KPICard 
             title="Today's Signatures" 
-            value={stats.todayPledges} 
+            value={stats.todayDemands} 
             icon={TrendingUp} 
             color="yellow" 
             trend="+24%" 
@@ -73,7 +73,7 @@ export default function AdminDashboard() {
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
               <defs>
-                <linearGradient id="colorPledges" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="colorDemands" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#ef4444" stopOpacity={0.4}/>
                   <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                 </linearGradient>
@@ -85,7 +85,7 @@ export default function AdminDashboard() {
                 contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)', color: '#fff' }}
                 itemStyle={{ color: '#ef4444' }}
               />
-              <Area type="monotone" dataKey="pledges" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorPledges)" />
+              <Area type="monotone" dataKey="demands" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorDemands)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>

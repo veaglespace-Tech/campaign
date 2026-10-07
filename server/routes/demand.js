@@ -1,15 +1,15 @@
 import express from 'express';
 import { 
-  createPledge, 
-  completePledge, 
+  createDemand, 
+  completeDemand, 
   verifyCertificate,
   downloadCertificate
-} from '../controllers/pledgeController.js';
+} from '../controllers/demandController.js';
 
 const router = express.Router();
 
-router.post('/create', createPledge);
-router.post('/complete', completePledge);
+router.post('/create', createDemand);
+router.post('/complete', completeDemand);
 router.get('/verify/:certId', verifyCertificate);
 router.get('/download/:certId', downloadCertificate);
 

@@ -44,7 +44,7 @@ export default function AdminLayout({ children }) {
 
   const navItems = [
     { name: 'Overview', href: '/admin', icon: LayoutDashboard },
-    { name: 'Users & Pledges', href: '/admin/users', icon: Users },
+    { name: 'Users & Demands', href: '/admin/users', icon: Users },
     { name: 'Site Config', href: '/admin/config', icon: Sliders },
   ];
 

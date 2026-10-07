@@ -55,9 +55,9 @@ async function main() {
     await prisma.siteConfig.create({
       data: {
         id: 1,
-        pledgeEnglish: english,
-        pledgeHindi: hindi,
-        pledgeMarathi: marathi
+        demandEnglish: english,
+        demandHindi: hindi,
+        demandMarathi: marathi
       }
     });
     console.log("SiteConfig created.");
@@ -65,9 +65,9 @@ async function main() {
     await prisma.siteConfig.update({
       where: { id: 1 },
       data: {
-        pledgeEnglish: english,
-        pledgeHindi: hindi,
-        pledgeMarathi: marathi
+        demandEnglish: english,
+        demandHindi: hindi,
+        demandMarathi: marathi
       }
     });
     console.log("SiteConfig updated.");

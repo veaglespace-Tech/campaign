@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Save, Languages, Shield, FileText } from 'lucide-react';
 import { useGetConfigQuery, useUpdateConfigMutation } from '../../../redux/api/apiSlice';
-import { defaultPledgeEnglish, defaultPledgeHindi, defaultPledgeMarathi } from '../../../constants/pledgeTexts';
+import { defaultDemandEnglish, defaultDemandHindi, defaultDemandMarathi } from '../../../constants/demandTexts';
 
 export default function SiteConfigPage() {
   const { data, isLoading } = useGetConfigQuery();
@@ -10,9 +10,9 @@ export default function SiteConfigPage() {
   
   const [formData, setFormData] = useState({
     donationUsage: '',
-    pledgeEnglish: '',
-    pledgeHindi: '',
-    pledgeMarathi: '',
+    demandEnglish: '',
+    demandHindi: '',
+    demandMarathi: '',
     certificateFormat: ''
   });
 
@@ -22,9 +22,9 @@ export default function SiteConfigPage() {
     if (data?.config) {
       setFormData({
         donationUsage: data.config.donationUsage || 'Your donations will be utilized for conducting the on-ground protests, legal fees, and student support.',
-        pledgeEnglish: data.config.pledgeEnglish || defaultPledgeEnglish.join('\n'),
-        pledgeHindi: data.config.pledgeHindi || defaultPledgeHindi.join('\n'),
-        pledgeMarathi: data.config.pledgeMarathi || defaultPledgeMarathi.join('\n'),
+        demandEnglish: data.config.demandEnglish || defaultDemandEnglish.join('\n'),
+        demandHindi: data.config.demandHindi || defaultDemandHindi.join('\n'),
+        demandMarathi: data.config.demandMarathi || defaultDemandMarathi.join('\n'),
         certificateFormat: data.config.certificateFormat || 'This certificate is proudly presented to {name} for supporting the MPSC Protest Demands.'
       });
     }
@@ -61,7 +61,7 @@ export default function SiteConfigPage() {
     <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Site Configuration</h1>
-        <p className="text-slate-600 mt-1">Manage public texts, certificates, and multi-language pledges.</p>
+        <p className="text-slate-600 mt-1">Manage public texts, certificates, and multi-language demands.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
@@ -108,38 +108,38 @@ export default function SiteConfigPage() {
           </div>
         </div>
 
-        {/* Multi-Language Pledges */}
+        {/* Multi-Language Demands */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-slate-200 bg-slate-100 flex items-center gap-3">
             <Languages className="text-amber-400" />
-            <h2 className="text-xl font-bold text-slate-900">Pledges (3 Languages)</h2>
+            <h2 className="text-xl font-bold text-slate-900">Demands (3 Languages)</h2>
           </div>
           <div className="p-6 space-y-6">
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">English Pledge (Enter one point per line)</label>
+              <label className="block text-sm font-bold text-slate-700 mb-2">English Demand (Enter one point per line)</label>
               <textarea
-                name="pledgeEnglish"
-                value={formData.pledgeEnglish}
+                name="demandEnglish"
+                value={formData.demandEnglish}
                 onChange={handleChange}
                 rows="10"
                 className="block w-full px-4 py-3 border border-slate-300 bg-slate-100 rounded-xl text-slate-900 focus:ring-2 focus:ring-amber-500 outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">Hindi Pledge (हिन्दी) (Enter one point per line)</label>
+              <label className="block text-sm font-bold text-slate-700 mb-2">Hindi Demand (हिन्दी) (Enter one point per line)</label>
               <textarea
-                name="pledgeHindi"
-                value={formData.pledgeHindi}
+                name="demandHindi"
+                value={formData.demandHindi}
                 onChange={handleChange}
                 rows="10"
                 className="block w-full px-4 py-3 border border-slate-300 bg-slate-100 rounded-xl text-slate-900 focus:ring-2 focus:ring-amber-500 outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">Marathi Pledge (मराठी) (Enter one point per line)</label>
+              <label className="block text-sm font-bold text-slate-700 mb-2">Marathi Demand (मराठी) (Enter one point per line)</label>
               <textarea
-                name="pledgeMarathi"
-                value={formData.pledgeMarathi}
+                name="demandMarathi"
+                value={formData.demandMarathi}
                 onChange={handleChange}
                 rows="10"
                 className="block w-full px-4 py-3 border border-slate-300 bg-slate-100 rounded-xl text-slate-900 focus:ring-2 focus:ring-amber-500 outline-none"

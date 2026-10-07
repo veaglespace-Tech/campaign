@@ -217,11 +217,11 @@ export const generateCertificate = async (
   // DEMANDS
   // ============================================================
   
-  const pledgeEnglish = config?.pledgeEnglish || `1. We demand that the MPSC exams be conducted fairly and transparently without any delays.\n2. We strongly demand the immediate announcement of the exam schedule for Agriculture Services and other exams.\n3. We demand that the government immediately fill all vacant positions in various departments.\n4. We stand united for the rights of all students and demand justice.`;
-  const pledgeMarathi = config?.pledgeMarathi || `१. एमपीएससीच्या परीक्षा वेळेवर आणि पारदर्शकपणे घेण्यात याव्यात अशी आमची मागणी आहे.\n२. कृषी सेवा आणि इतर परीक्षांचे वेळापत्रक त्वरित जाहीर करण्यात यावे.\n३. शासनाने विविध विभागांतील सर्व रिक्त पदे लवकरात लवकर भरावीत.\n४. विद्यार्थ्यांच्या हक्कासाठी आम्ही सर्वजण एकत्र उभे आहोत आणि न्यायाची मागणी करत आहोत.`;
-  const pledgeHindi = config?.pledgeHindi || `१. हमारी मांग है कि एमपीएससी की परीक्षाएं समय पर और पारदर्शी तरीके से आयोजित की जाएं।\n२. कृषि सेवा और अन्य परीक्षाओं का कार्यक्रम तुरंत घोषित किया जाए।\n३. सरकार विभिन्न विभागों में सभी रिक्त पदों को जल्द से जल्द भरे।\n४. हम छात्रों के अधिकारों के लिए एकजुट हैं और न्याय की मांग करते हैं।`;
+  const demandEnglish = config?.demandEnglish || `1. We demand that the MPSC exams be conducted fairly and transparently without any delays.\n2. We strongly demand the immediate announcement of the exam schedule for Agriculture Services and other exams.\n3. We demand that the government immediately fill all vacant positions in various departments.\n4. We stand united for the rights of all students and demand justice.`;
+  const demandMarathi = config?.demandMarathi || `१. एमपीएससीच्या परीक्षा वेळेवर आणि पारदर्शकपणे घेण्यात याव्यात अशी आमची मागणी आहे.\n२. कृषी सेवा आणि इतर परीक्षांचे वेळापत्रक त्वरित जाहीर करण्यात यावे.\n३. शासनाने विविध विभागांतील सर्व रिक्त पदे लवकरात लवकर भरावीत.\n४. विद्यार्थ्यांच्या हक्कासाठी आम्ही सर्वजण एकत्र उभे आहोत आणि न्यायाची मागणी करत आहोत.`;
+  const demandHindi = config?.demandHindi || `१. हमारी मांग है कि एमपीएससी की परीक्षाएं समय पर और पारदर्शी तरीके से आयोजित की जाएं।\n२. कृषि सेवा और अन्य परीक्षाओं का कार्यक्रम तुरंत घोषित किया जाए।\n३. सरकार विभिन्न विभागों में सभी रिक्त पदों को जल्द से जल्द भरे।\n४. हम छात्रों के अधिकारों के लिए एकजुट हैं और न्याय की मांग करते हैं।`;
 
-  let demandsText = pledgeEnglish; // Force English to prevent PDF unicode errors with indic scripts
+  let demandsText = demandEnglish; // Force English to prevent PDF unicode errors with indic scripts
 
   let currentY = NAME_Y - 50;
   

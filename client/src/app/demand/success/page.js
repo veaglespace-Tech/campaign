@@ -39,7 +39,7 @@ function SuccessContent() {
             <p className="text-sm text-gray-500 mb-1 font-bold">Your Certificate ID</p>
             <p className="font-black text-2xl text-gray-900 tracking-wider mb-2">{certId}</p>
             <a
-              href={`${apiUrl}/pledges/download/${certId}`}
+              href={`${apiUrl}/demands/download/${certId}`}
               download
               target="_blank"
               rel="noopener noreferrer"

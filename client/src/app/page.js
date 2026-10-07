@@ -51,7 +51,7 @@ export default function Home() {
           {/* Vibrant CTA Button */}
           <div className="animate-fade-in-up-delay-3 flex justify-center">
             <Link
-              href="/pledge"
+              href="/demand"
               className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-red-600 to-red-500 text-white font-black text-xl rounded-full overflow-hidden shadow-[0_10px_40px_rgba(220,38,38,0.4)] hover:shadow-[0_15px_50px_rgba(220,38,38,0.6)] hover:-translate-y-1 transition-all duration-300"
             >
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
@@ -67,7 +67,7 @@ export default function Home() {
               
               <div className="flex flex-col items-center justify-center space-y-3 hover:scale-105 transition-transform duration-300">
                 <span className="text-6xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400 tracking-tight drop-shadow-lg">
-                  {data.stats.totalPledges.toLocaleString()}
+                  {data.stats.totalDemands.toLocaleString()}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />

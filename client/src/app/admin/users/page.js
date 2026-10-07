@@ -1,22 +1,22 @@
 'use client';
 import { Download, Search, CheckCircle2, Clock, Filter, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
-import { useGetAdminPledgesQuery } from '../../../redux/api/apiSlice';
+import { useGetAdminDemandsQuery } from '../../../redux/api/apiSlice';
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 
 export default function UsersPage() {
-  const { data, isLoading } = useGetAdminPledgesQuery();
+  const { data, isLoading } = useGetAdminDemandsQuery();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'generated', 'pending'
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const pledges = data?.success ? data.pledges : [];
+  const demands = data?.success ? data.demands : [];
 
   // Filter & Search Logic
-  const filteredPledges = useMemo(() => {
-    return pledges.filter(p => {
+  const filteredDemands = useMemo(() => {
+    return demands.filter(p => {
       const matchesSearch = 
         p.user?.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
         p.user?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -31,14 +31,14 @@ export default function UsersPage() {
 
       return matchesSearch && matchesStatus;
     });
-  }, [pledges, searchTerm, statusFilter]);
+  }, [demands, searchTerm, statusFilter]);
 
   // Pagination Logic
-  const totalPages = Math.ceil(filteredPledges.length / itemsPerPage);
-  const paginatedPledges = useMemo(() => {
+  const totalPages = Math.ceil(filteredDemands.length / itemsPerPage);
+  const paginatedDemands = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    return filteredPledges.slice(start, start + itemsPerPage);
-  }, [filteredPledges, currentPage]);
+    return filteredDemands.slice(start, start + itemsPerPage);
+  }, [filteredDemands, currentPage]);
 
   // Reset to page 1 when filters change
   useMemo(() => {
@@ -57,7 +57,7 @@ export default function UsersPage() {
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in-up">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Users & Pledges</h1>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Users & Demands</h1>
           <p className="text-slate-600 mt-1">Manage and export all campaign participants.</p>
         </div>
         <button className="flex items-center gap-2 bg-[#FF9933] hover:bg-[#E6852E] text-white px-5 py-2.5 rounded-xl font-medium transition-all shadow-lg shadow-[#FF9933]/20">
@@ -112,28 +112,28 @@ export default function UsersPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-slate-200">
-              {paginatedPledges.map((pledge) => (
-                <tr key={pledge.id} className="hover:bg-slate-100 transition-colors">
+              {paginatedDemands.map((demand) => (
+                <tr key={demand.id} className="hover:bg-slate-100 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-full bg-[#FF9933]/15 text-[#FF9933] flex items-center justify-center font-bold border border-[#FF9933]/20">
-                        {pledge.user?.name.charAt(0)}
+                        {demand.user?.name.charAt(0)}
                       </div>
                       <div>
-                        <div className="font-bold text-slate-900">{pledge.user?.name}</div>
-                        <div className="text-sm text-slate-600">{pledge.user?.email}</div>
+                        <div className="font-bold text-slate-900">{demand.user?.name}</div>
+                        <div className="text-sm text-slate-600">{demand.user?.email}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-slate-900 font-medium">{pledge.user?.city || '-'}</div>
-                    <div className="text-sm text-slate-600">{pledge.user?.state || '-'}</div>
+                    <div className="text-slate-900 font-medium">{demand.user?.city || '-'}</div>
+                    <div className="text-sm text-slate-600">{demand.user?.state || '-'}</div>
                   </td>
                   <td className="px-6 py-4 text-slate-700 font-medium">
-                    {new Date(pledge.pledgeDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    {new Date(demand.demandDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </td>
                   <td className="px-6 py-4">
-                    {pledge.certificates && pledge.certificates.length > 0 ? (
+                    {demand.certificates && demand.certificates.length > 0 ? (
                       <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         <CheckCircle2 size={14} /> Generated
                       </div>
@@ -146,15 +146,15 @@ export default function UsersPage() {
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <Link 
-                        href={`/admin/users/${pledge.id}`}
+                        href={`/admin/users/${demand.id}`}
                         className="inline-flex items-center justify-center px-4 py-2 bg-[#FFF9F2] hover:bg-[#FF9933]/10 text-[#FF9933] font-semibold rounded-lg transition-colors border border-[#FF9933]/20"
                       >
                         View Details
                       </Link>
-                      {pledge.certificates && pledge.certificates.length > 0 && (
+                      {demand.certificates && demand.certificates.length > 0 && (
                         <>
                           <a
-                            href={`${apiUrl}/pledges/download/${pledge.certificates[0].certificateNumber}`}
+                            href={`${apiUrl}/demands/download/${demand.certificates[0].certificateNumber}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center justify-center px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg transition-colors border border-slate-200"
@@ -163,7 +163,7 @@ export default function UsersPage() {
                             <Eye size={18} />
                           </a>
                           <a
-                            href={`${apiUrl}/pledges/download/${pledge.certificates[0].certificateNumber}`}
+                            href={`${apiUrl}/demands/download/${demand.certificates[0].certificateNumber}`}
                             download
                             target="_blank"
                             rel="noopener noreferrer"
@@ -178,7 +178,7 @@ export default function UsersPage() {
                   </td>
                 </tr>
               ))}
-              {paginatedPledges.length === 0 && (
+              {paginatedDemands.length === 0 && (
                 <tr>
                   <td colSpan="5" className="px-6 py-12 text-center text-slate-500">
                     No users found matching your search and filters.
@@ -193,7 +193,7 @@ export default function UsersPage() {
         {totalPages > 1 && (
           <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-sm text-slate-500 text-center sm:text-left">
-              Showing <span className="font-semibold text-slate-900">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-semibold text-slate-900">{Math.min(currentPage * itemsPerPage, filteredPledges.length)}</span> of <span className="font-semibold text-slate-900">{filteredPledges.length}</span> results
+              Showing <span className="font-semibold text-slate-900">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-semibold text-slate-900">{Math.min(currentPage * itemsPerPage, filteredDemands.length)}</span> of <span className="font-semibold text-slate-900">{filteredDemands.length}</span> results
             </div>
             <div className="flex items-center gap-2">
               <button

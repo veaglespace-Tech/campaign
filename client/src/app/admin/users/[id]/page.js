@@ -1,5 +1,5 @@
 'use client';
-import { useGetAdminPledgesQuery } from '../../../../redux/api/apiSlice';
+import { useGetAdminDemandsQuery } from '../../../../redux/api/apiSlice';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, User, Mail, Phone, MapPin, Briefcase, FileText, IndianRupee, Calendar, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
@@ -7,10 +7,10 @@ import Link from 'next/link';
 export default function UserDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { data, isLoading } = useGetAdminPledgesQuery();
+  const { data, isLoading } = useGetAdminDemandsQuery();
 
-  const pledges = data?.success ? data.pledges : [];
-  const pledge = pledges.find(p => p.id === parseInt(id));
+  const demands = data?.success ? data.demands : [];
+  const demand = demands.find(p => p.id === parseInt(id));
 
   if (isLoading) {
     return (
@@ -20,7 +20,7 @@ export default function UserDetailPage() {
     );
   }
 
-  if (!pledge) {
+  if (!demand) {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] space-y-4">
         <h2 className="text-2xl font-bold text-slate-900">User Not Found</h2>
@@ -30,9 +30,9 @@ export default function UserDetailPage() {
     );
   }
 
-  const user = pledge.user;
-  const donations = pledge.donations || [];
-  const certificates = pledge.certificates || [];
+  const user = demand.user;
+  const donations = demand.donations || [];
+  const certificates = demand.certificates || [];
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -67,22 +67,22 @@ export default function UserDetailPage() {
           </div>
         </div>
 
-        {/* Pledge Info */}
+        {/* Demand Info */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="px-8 py-5 bg-slate-50 border-b border-slate-200">
             <h4 className="font-bold text-slate-900 flex items-center gap-2 text-lg">
               <FileText size={20} className="text-orange-500" />
-              Pledge Information
+              Demand Information
             </h4>
           </div>
           <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <DetailRow icon={Calendar} label="Pledge Date" value={new Date(pledge.pledgeDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })} />
-            <DetailRow icon={FileText} label="Language" value={pledge.language ? pledge.language.charAt(0).toUpperCase() + pledge.language.slice(1) : '-'} />
-            <DetailRow icon={FileText} label="Campaign" value={pledge.campaign?.name || '-'} />
-            {pledge.pledgeText && (
+            <DetailRow icon={Calendar} label="Demand Date" value={new Date(demand.demandDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })} />
+            <DetailRow icon={FileText} label="Language" value={demand.language ? demand.language.charAt(0).toUpperCase() + demand.language.slice(1) : '-'} />
+            <DetailRow icon={FileText} label="Campaign" value={demand.campaign?.name || '-'} />
+            {demand.demandText && (
               <div className="md:col-span-2 pt-4">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Pledge Text</p>
-                <p className="text-slate-700 bg-slate-50 rounded-2xl p-6 border border-slate-200 leading-relaxed text-lg italic">"{pledge.pledgeText}"</p>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Demand Text</p>
+                <p className="text-slate-700 bg-slate-50 rounded-2xl p-6 border border-slate-200 leading-relaxed text-lg italic">"{demand.demandText}"</p>
               </div>
             )}
           </div>

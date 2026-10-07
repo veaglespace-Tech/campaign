@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const defaultPledgeHindi = [
+const defaultDemandHindi = [
   "मैं नशीले पदार्थो और नशे की लत को दृढ़ता से ना कहूँगा/कहूँगी और स्वस्थ, जिम्मेदार एवं सकारात्मक जीवन जीने का प्रयास करूँगा/करूँगी।",
   "मैं अपने शरीर, मन, रिश्तों और भविष्य को नुकसान पहुँचाने वाले अवैध ड्रग्स और मादक पदार्थो से दूर रहूँगा/रहूँगी।",
   "मैं तंबाकू और निकोटीन उत्पादों को ना कहूँगा/कहूँगी, जिनमें सिगरेट, बीड़ी, गुटखा, खैनी, पान मसाला, चबाने वाला तंबाकू, वेपिंग उत्पाद, ई-सिगरेट और अन्य तंबाकू या निकोटीन उत्पाद शामिल हैं।",
@@ -14,7 +14,7 @@ const defaultPledgeHindi = [
   "मैं नशे और मादक पदार्थों के हानिकारक प्रभावों के बारे में जागरूकता फैलाने में योगदान दूँगा/दूँगी और एक स्वस्थ, सुरक्षित एवं नशामुक्त समाज बनाने में अपनी भूमिका निभाऊँगा/निभाऊँगी।"
 ];
 
-const defaultPledgeMarathi = [
+const defaultDemandMarathi = [
   "मी अमली पदार्थ आणि व्यसनाधीनतेला ठामपणे नकार देईन आणि निरोगी, जबाबदार व सकारात्मक जीवन जगण्याचा प्रयत्न करेन.",
   "माझ्या शरीराला, मनाला, नातेसंबंधांना आणि भविष्यातील जीवनाला हानी पोहोचवणाऱ्या बेकायदेशीर अमली पदार्थांपासून व मादक पदार्थांपासून मी दूर राहीन.",
   "मी तंबाखू व निकोटीनयुक्त पदार्थांना नकार देईन, ज्यामध्ये सिगारेट, बीडी, गुटखा, खैनी, पान मसाला, चघळण्याचा तंबाखू, व्हेपिंग उत्पादने, ई-सिगारेट आणि इतर तंबाखू किंवा निकोटीनयुक्त पदार्थांचा समावेश आहे.",
@@ -26,7 +26,7 @@ const defaultPledgeMarathi = [
   "व्यसनाधीनतेच्या आणि अमली पदार्थांच्या दुष्परिणामांबद्दल जनजागृती करण्यासाठी मी योगदान देईन आणि निरोगी, सुरक्षित व व्यसनमुक्त समाज घडविण्यासाठी माझी भूमिका बजावेन."
 ];
 
-const defaultPledgeEnglish = [
+const defaultDemandEnglish = [
   "I will say NO to drugs and substance abuse and choose a healthy, responsible and positive life.",
   "I will stay away from illegal drugs and narcotic substances, including substances that can harm my body, mind, relationships and future.",
   "I will say NO to tobacco and nicotine products, including cigarettes, bidis, gutkha, khaini, pan masala, chewing tobacco, vaping products, e-cigarettes and other tobacco or nicotine products.",
@@ -42,10 +42,10 @@ async function seedConfig() {
   try {
     const configData = {
       donationUsage: "Your donations will be utilized for conducting De-addiction drives, supporting rehabilitation centers, and promoting Women Safety initiatives.",
-      pledgeEnglish: defaultPledgeEnglish.join('\n'),
-      pledgeHindi: defaultPledgeHindi.join('\n'),
-      pledgeMarathi: defaultPledgeMarathi.join('\n'),
-      certificateFormat: "This certificate is proudly presented to {name} for taking the Say No to Drugs Pledge."
+      demandEnglish: defaultDemandEnglish.join('\n'),
+      demandHindi: defaultDemandHindi.join('\n'),
+      demandMarathi: defaultDemandMarathi.join('\n'),
+      certificateFormat: "This certificate is proudly presented to {name} for taking the Say No to Drugs Demand."
     };
 
     const config = await prisma.siteConfig.upsert({

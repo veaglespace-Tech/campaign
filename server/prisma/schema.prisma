@@ -16,7 +16,7 @@ model User {
   city       String?
   state      String?
   createdAt  DateTime @default(now())
-  pledges    Pledge[]
+  demands    Demand[]
 
   @@map("users")
 }
@@ -28,37 +28,37 @@ model Campaign {
   logo                String?
   certificateTemplate String?
   status              String   @default("active") // active, inactive
-  pledges             Pledge[]
+  demands             Demand[]
 
   @@map("campaigns")
 }
 
-model Pledge {
+model Demand {
   id           Int           @id @default(autoincrement())
   userId       Int
   campaignId   Int
-  pledgeText   String?       @db.Text
+  demandText   String?       @db.Text
   language     String        @default("english") // english, hindi, marathi
-  pledgeDate   DateTime      @default(now())
+  demandDate   DateTime      @default(now())
   status       String        @default("completed")
   
   user         User          @relation(fields: [userId], references: [id])
   campaign     Campaign      @relation(fields: [campaignId], references: [id])
   certificates Certificate[]
 
-  @@map("pledges")
+  @@map("demands")
 }
 
 model Certificate {
   id                Int      @id @default(autoincrement())
-  pledgeId          Int
+  demandId          Int
   certificateNumber String   @unique
   pdfPath           String?
   verificationToken String   @unique
   generatedAt       DateTime @default(now())
   emailStatus       String   @default("pending") // pending, sent, failed
 
-  pledge Pledge @relation(fields: [pledgeId], references: [id])
+  demand Demand @relation(fields: [demandId], references: [id])
 
   @@map("certificates")
 }
@@ -79,9 +79,9 @@ model AdminUser {
 
 model SiteConfig {
   id                Int      @id @default(1)
-  pledgeEnglish     String?  @db.Text
-  pledgeHindi       String?  @db.Text
-  pledgeMarathi     String?  @db.Text
+  demandEnglish     String?  @db.Text
+  demandHindi       String?  @db.Text
+  demandMarathi     String?  @db.Text
   certificateFormat String?  @db.Text
   updatedAt         DateTime @default(now()) @updatedAt
 

@@ -5,11 +5,11 @@ import { prisma } from '../config/prisma.js';
 import { config } from '../config/index.js';
 import { generateCertificate } from '../services/certificateService.js';
 
-// @desc    Create a pledge
-// @route   POST /api/pledges/create
+// @desc    Create a demand
+// @route   POST /api/demands/create
 // @access  Public
-export const createPledge = asyncHandler(async (req, res) => {
-  const { name, mobile, email, profession, city, state, campaignId, pledgeText, language = 'english' } = req.body;
+export const createDemand = asyncHandler(async (req, res) => {
+  const { name, mobile, email, profession, city, state, campaignId, demandText, language = 'english' } = req.body;
 
   if (!name || !mobile || !email || !campaignId) {
     res.status(400);
@@ -36,7 +36,7 @@ export const createPledge = asyncHandler(async (req, res) => {
   if (!campaignExists) {
     let firstActive = await prisma.campaign.findFirst({ where: { status: 'active' } });
     if (!firstActive) {
-      // Auto-create default campaign to prevent blocking the pledge
+      // Auto-create default campaign to prevent blocking the demand
       firstActive = await prisma.campaign.create({
         data: {
           name: 'MPSC Protest Support',
@@ -57,21 +57,21 @@ export const createPledge = asyncHandler(async (req, res) => {
       data: { name, mobile, email, profession, city, state }
     });
   } else {
-    const existingPledge = await prisma.pledge.findFirst({
+    const existingDemand = await prisma.demand.findFirst({
       where: { userId: user.id, campaignId: campaignToUse }
     });
     
-    if (existingPledge) {
+    if (existingDemand) {
       res.status(400);
-      throw new Error('This email is already registered for this pledge. Please use a different email.');
+      throw new Error('This email is already registered for this demand. Please use a different email.');
     }
   }
 
-  const pledge = await prisma.pledge.create({
+  const demand = await prisma.demand.create({
     data: {
       userId: user.id,
       campaignId: campaignToUse,
-      pledgeText: pledgeText || 'We demand fair, transparent, and timely MPSC exams.',
+      demandText: demandText || 'We demand fair, transparent, and timely MPSC exams.',
       language
     }
   });
@@ -80,7 +80,7 @@ export const createPledge = asyncHandler(async (req, res) => {
   let config = await prisma.siteConfig.findUnique({ where: { id: 1 } });
   
   // Generate standard certificate number
-  const certNumber = `MPSC-${new Date().getFullYear()}-${pledge.id.toString().padStart(6, '0')}`;
+  const certNumber = `MPSC-${new Date().getFullYear()}-${demand.id.toString().padStart(6, '0')}`;
   const dateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   const pdfBuffer = await generateCertificate(user.name, certNumber, dateStr, language, config);
 
@@ -88,45 +88,45 @@ export const createPledge = asyncHandler(async (req, res) => {
   
   const certificate = await prisma.certificate.create({
     data: {
-      pledgeId: pledge.id,
+      demandId: demand.id,
       certificateNumber: certNumber,
       verificationToken
     }
   });
 
-  res.json({ success: true, pledgeId: pledge.id, certificateNumber: certNumber, message: 'Pledge created successfully' });
+  res.json({ success: true, demandId: demand.id, certificateNumber: certNumber, message: 'Demand created successfully' });
 });
 
 
 
-// @desc    Complete Pledge (Without Donation or After Donation Init)
-// @route   POST /api/pledges/complete
+// @desc    Complete Demand (Without Donation or After Donation Init)
+// @route   POST /api/demands/complete
 // @access  Public
-export const completePledge = asyncHandler(async (req, res) => {
-  const { pledgeId } = req.body;
+export const completeDemand = asyncHandler(async (req, res) => {
+  const { demandId } = req.body;
   
-  const pledge = await prisma.pledge.findUnique({
-    where: { id: parseInt(pledgeId) },
+  const demand = await prisma.demand.findUnique({
+    where: { id: parseInt(demandId) },
     include: { certificates: true }
   });
 
-  if (!pledge) {
+  if (!demand) {
     res.status(404);
-    throw new Error('Pledge not found');
+    throw new Error('Demand not found');
   }
 
-  const certNumber = pledge.certificates[0]?.certificateNumber || '';
+  const certNumber = demand.certificates[0]?.certificateNumber || '';
 
   res.json({ success: true, certificateNumber: certNumber });
 });
 
 // @desc    Verify Certificate
-// @route   GET /api/pledges/verify/:certId
+// @route   GET /api/demands/verify/:certId
 // @access  Public
 export const verifyCertificate = asyncHandler(async (req, res) => {
   const certificate = await prisma.certificate.findUnique({
     where: { certificateNumber: req.params.certId },
-    include: { pledge: { include: { user: true } } }
+    include: { demand: { include: { user: true } } }
   });
 
   if (!certificate) {
@@ -138,7 +138,7 @@ export const verifyCertificate = asyncHandler(async (req, res) => {
     success: true,
     data: {
       certificateId: certificate.certificateNumber,
-      name: certificate.pledge.user.name,
+      name: certificate.demand.user.name,
       date: certificate.generatedAt.toLocaleDateString('en-GB'),
       status: 'VERIFIED'
     }
@@ -146,12 +146,12 @@ export const verifyCertificate = asyncHandler(async (req, res) => {
 });
 
 // @desc    Download Certificate
-// @route   GET /api/pledges/download/:certId
+// @route   GET /api/demands/download/:certId
 // @access  Public
 export const downloadCertificate = asyncHandler(async (req, res) => {
   const certificate = await prisma.certificate.findUnique({
     where: { certificateNumber: req.params.certId },
-    include: { pledge: { include: { user: true } } }
+    include: { demand: { include: { user: true } } }
   });
 
   if (!certificate) {
@@ -163,10 +163,10 @@ export const downloadCertificate = asyncHandler(async (req, res) => {
   
   const dateStr = certificate.generatedAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   const pdfBuffer = await generateCertificate(
-    certificate.pledge.user.name,
+    certificate.demand.user.name,
     certificate.certificateNumber,
     dateStr,
-    certificate.pledge.language,
+    certificate.demand.language,
     config
   );
 

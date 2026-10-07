@@ -9,10 +9,10 @@ const getOrCreateConfig = async () => {
       data: {
         id: 1,
         donationUsage: 'Your donations will be utilized for conducting De-addiction drives, supporting rehabilitation centers, and promoting Women Safety initiatives across the region. Every contribution helps build a healthier society.',
-        pledgeEnglish: 'I pledge to say NO to drugs and substance abuse and to promote awareness, healthy choices and a drug-free society.',
-        pledgeHindi: 'मैं नशीली दवाओं और मादक पदार्थों के सेवन को ना कहने और जागरूकता, स्वस्थ विकल्पों और नशा मुक्त समाज को बढ़ावा देने की प्रतिज्ञा करता हूँ।',
-        pledgeMarathi: 'मी अमली पदार्थ आणि व्यसनांना नाही म्हणण्याची आणि जागरूकता, निरोगी जीवनशैली आणि व्यसनमुक्त समाजाला प्रोत्साहन देण्याची प्रतिज्ञा करतो.',
-        certificateFormat: 'This certificate is proudly presented to {name} for taking the pledge to SAY NO TO DRUGS and supporting the vision of building a healthier, safer and drug-free society.'
+        demandEnglish: 'I demand to say NO to drugs and substance abuse and to promote awareness, healthy choices and a drug-free society.',
+        demandHindi: 'मैं नशीली दवाओं और मादक पदार्थों के सेवन को ना कहने और जागरूकता, स्वस्थ विकल्पों और नशा मुक्त समाज को बढ़ावा देने की प्रतिज्ञा करता हूँ।',
+        demandMarathi: 'मी अमली पदार्थ आणि व्यसनांना नाही म्हणण्याची आणि जागरूकता, निरोगी जीवनशैली आणि व्यसनमुक्त समाजाला प्रोत्साहन देण्याची प्रतिज्ञा करतो.',
+        certificateFormat: 'This certificate is proudly presented to {name} for taking the demand to SAY NO TO DRUGS and supporting the vision of building a healthier, safer and drug-free society.'
       }
     });
   }
@@ -31,7 +31,7 @@ export const getConfig = asyncHandler(async (req, res) => {
 // @route   PUT /api/admin/config
 // @access  Private (Admin)
 export const updateConfig = asyncHandler(async (req, res) => {
-  const { donationUsage, pledgeEnglish, pledgeHindi, pledgeMarathi, certificateFormat } = req.body;
+  const { donationUsage, demandEnglish, demandHindi, demandMarathi, certificateFormat } = req.body;
   
   await getOrCreateConfig(); // ensure it exists first
   
@@ -39,9 +39,9 @@ export const updateConfig = asyncHandler(async (req, res) => {
     where: { id: 1 },
     data: {
       donationUsage,
-      pledgeEnglish,
-      pledgeHindi,
-      pledgeMarathi,
+      demandEnglish,
+      demandHindi,
+      demandMarathi,
       certificateFormat
     }
   });

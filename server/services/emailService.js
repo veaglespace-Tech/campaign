@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-export const sendCertificateEmail = async (toEmail, name, pledgeId, pdfBuffer) => {
+export const sendCertificateEmail = async (toEmail, name, demandId, pdfBuffer) => {
   try {
     const mailOptions = {
       from: `"MPSC Protest Support" <${config.email.user}>`,
@@ -20,14 +20,14 @@ export const sendCertificateEmail = async (toEmail, name, pledgeId, pdfBuffer) =
           <h2>Dear ${name},</h2>
           <p>Thank you for registering your support for the MPSC Students Protest.</p>
           <p>Your commitment helps amplify the voice of lakhs of students demanding a fair, transparent, and timely examination process.</p>
-          <p><strong>Support ID:</strong> ${pledgeId}</p>
+          <p><strong>Support ID:</strong> ${demandId}</p>
           <p>Your official support certificate is attached.</p>
           <p>Stand United. Demand Justice.</p>
         </div>
       `,
       attachments: [
         {
-          filename: `certificate-${pledgeId}.pdf`,
+          filename: `certificate-${demandId}.pdf`,
           content: pdfBuffer,
           contentType: 'application/pdf'
         }

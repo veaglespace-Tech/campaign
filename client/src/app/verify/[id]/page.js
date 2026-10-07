@@ -46,7 +46,7 @@ export default function VerifyPage({ params }) {
             
             <div className="bg-[#FAFAFA] p-6 rounded-2xl border border-gray-200 mb-8 relative z-10 text-left space-y-4">
               <div>
-                <p className="text-xs text-[#6b7280] font-bold uppercase tracking-wider mb-1">Pledge Taker</p>
+                <p className="text-xs text-[#6b7280] font-bold uppercase tracking-wider mb-1">Demand Taker</p>
                 <p className="font-bold text-lg text-[#1a1a1a] truncate">{data.data.name}</p>
               </div>
               <div>

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Languages, AlertCircle } from 'lucide-react';
-import { useCreatePledgeMutation } from '../../redux/api/apiSlice';
-import { getPledgePoints } from '../../constants/pledgeTexts';
+import { useCreateDemandMutation } from '../../redux/api/apiSlice';
+import { getDemandPoints } from '../../constants/demandTexts';
 
-export default function PledgeForm({ campaignId, siteConfig, onSuccess }) {
+export default function DemandForm({ campaignId, siteConfig, onSuccess }) {
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
@@ -17,7 +17,7 @@ export default function PledgeForm({ campaignId, siteConfig, onSuccess }) {
   const [language, setLanguage] = useState('english');
   const [errorStatus, setErrorStatus] = useState(false);
   
-  const [createPledge, { isLoading: isCreating }] = useCreatePledgeMutation();
+  const [createDemand, { isLoading: isCreating }] = useCreateDemandMutation();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -33,21 +33,21 @@ export default function PledgeForm({ campaignId, siteConfig, onSuccess }) {
     
     setErrorStatus(false);
     try {
-      const res = await createPledge({
+      const res = await createDemand({
         ...formData,
         campaignId,
         language,
-        pledgeText: '9 points standard pledge' // Storing a summary since the full text is huge
+        demandText: '9 points standard demand' // Storing a summary since the full text is huge
       }).unwrap();
       
       if (res.success) {
-        onSuccess(res.pledgeId);
+        onSuccess(res.demandId);
       } else {
         setErrorStatus(true);
       }
     } catch (error) {
       console.error('Submit Error:', error);
-      const errorMessage = error?.data?.message || 'There was an error processing your pledge. Please try again.';
+      const errorMessage = error?.data?.message || 'There was an error processing your demand. Please try again.';
       alert(errorMessage);
       setErrorStatus(true);
     }
@@ -98,7 +98,7 @@ export default function PledgeForm({ campaignId, siteConfig, onSuccess }) {
           <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-[1.5rem] border border-white/10 p-6 mb-8 flex flex-col shadow-inner">
             <div className="flex-1 overflow-y-auto pr-3 custom-scrollbar text-left space-y-4" style={{ maxHeight: '350px' }}>
               <ul className="list-none pl-0 text-sm text-gray-300 space-y-4 font-medium">
-                {getPledgePoints(language, siteConfig).map((point, idx) => (
+                {getDemandPoints(language, siteConfig).map((point, idx) => (
                   <li key={idx} className="leading-relaxed">{point}</li>
                 ))}
               </ul>
