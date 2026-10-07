@@ -35,27 +35,18 @@ export default function AdminDashboard() {
       
       {/* KPI Cards */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <KPICard 
             title="Total Supporters" 
             value={stats.totalDemands} 
             icon={Users} 
             color="red" 
-            trend="+12%" 
           />
           <KPICard 
             title="Certificates Issued" 
             value={stats.certificatesGenerated} 
             icon={FileText} 
             color="orange" 
-            trend="+12%" 
-          />
-          <KPICard 
-            title="Today's Signatures" 
-            value={stats.todayDemands} 
-            icon={TrendingUp} 
-            color="yellow" 
-            trend="+24%" 
           />
         </div>
       )}
@@ -94,7 +85,7 @@ export default function AdminDashboard() {
   );
 }
 
-function KPICard({ title, value, icon: Icon, color, trend }) {
+function KPICard({ title, value, icon: Icon, color }) {
   const colorMap = {
     red: { iconBg: 'bg-red-500/10', iconColor: 'text-red-500', trendColor: 'text-red-400', trendBg: 'bg-red-500/10' },
     orange: { iconBg: 'bg-orange-500/10', iconColor: 'text-orange-500', trendColor: 'text-orange-400', trendBg: 'bg-orange-500/10' },
@@ -116,9 +107,6 @@ function KPICard({ title, value, icon: Icon, color, trend }) {
       </div>
       <div className="flex items-baseline gap-3">
         <div className="text-4xl font-black text-white">{value}</div>
-        <div className={`text-sm font-semibold ${c.trendColor} ${c.trendBg} px-2 py-1 rounded-lg`}>
-          {trend}
-        </div>
       </div>
     </div>
   );
