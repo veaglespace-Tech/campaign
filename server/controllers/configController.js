@@ -8,8 +8,8 @@ const getOrCreateConfig = async () => {
     config = await prisma.siteConfig.create({
       data: {
         id: 1,
-        demandEnglish: 'I demand to say NO to drugs and substance abuse and to promote awareness, healthy choices and a drug-free society.',
-        certificateFormat: 'This certificate is proudly presented to {name} for taking the demand to SAY NO TO DRUGS and supporting the vision of building a healthier, safer and drug-free society.'
+        demandEnglish: '1. Institutional Accountability\n2. Examination System Reforms\n3. Recruitment & Vacancies\n4. Age Relaxations & Eligibility\n5. Financial & Administrative Ease',
+        certificateFormat: 'This certificate is proudly presented to {name} for supporting the MPSC Protest Demands and fighting for a fair examination system.'
       }
     });
   }

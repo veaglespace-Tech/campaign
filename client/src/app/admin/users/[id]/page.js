@@ -1,7 +1,7 @@
 'use client';
 import { useGetAdminDemandsQuery } from '../../../../redux/api/apiSlice';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, User, Mail, Phone, MapPin, Briefcase, FileText, IndianRupee, Calendar, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, User, Mail, Phone, MapPin, Briefcase, FileText, Calendar, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function UserDetailPage() {
@@ -31,7 +31,6 @@ export default function UserDetailPage() {
   }
 
   const user = demand.user;
-  const donations = demand.donations || [];
   const certificates = demand.certificates || [];
 
   return (
@@ -123,44 +122,6 @@ export default function UserDetailPage() {
           </div>
         </div>
 
-        {/* Donations */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-8 py-5 bg-slate-50 border-b border-slate-200">
-            <h4 className="font-bold text-slate-900 flex items-center gap-2 text-lg">
-              <IndianRupee size={20} className="text-emerald-500" />
-              Donations ({donations.length})
-            </h4>
-          </div>
-          <div className="p-8">
-            {donations.length > 0 ? (
-              <div className="space-y-4">
-                {donations.map((donation) => (
-                  <div key={donation.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-slate-50 rounded-2xl border border-slate-200 gap-4">
-                    <div>
-                      <p className="text-2xl font-black text-emerald-600 mb-1">₹{donation.amount}</p>
-                      <code className="text-sm text-slate-600">TXN: {donation.transactionId || 'N/A'}</code>
-                      {donation.paymentDate && (
-                        <p className="text-sm text-slate-500 mt-2">
-                          {new Date(donation.paymentDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                        </p>
-                      )}
-                    </div>
-                    <div className={`text-sm font-bold px-4 py-2 rounded-full w-fit ${
-                      donation.paymentStatus === 'success' 
-                        ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' 
-                        : donation.paymentStatus === 'failed'
-                        ? 'bg-red-500/10 text-red-600 border border-red-500/20'
-                        : 'bg-amber-500/10 text-amber-600 border border-amber-500/20'
-                    }`}>
-                      {donation.paymentStatus}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-slate-500 py-4">No donations made.</p>
-            )}
-          </div>
         </div>
       </div>
     </div>

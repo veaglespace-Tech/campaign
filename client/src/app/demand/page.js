@@ -3,7 +3,7 @@ import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { HeartHandshake, ShieldCheck, Flag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useGetConfigQuery, useCompleteDemandMutation } from '../../redux/api/apiSlice';
+import { useGetConfigQuery } from '../../redux/api/apiSlice';
 import DemandForm from '../../components/demand/DemandForm';
 import { useRouter } from 'next/navigation';
 
@@ -14,26 +14,24 @@ function DemandContent() {
   const { data: configData } = useGetConfigQuery();
   const siteConfig = configData?.config || {};
 
-  const [status, setStatus] = useState('idle'); // idle, success
+  const [status, setStatus] = useState('idle');
+
   const [demandId, setDemandId] = useState(null);
   
-  const [completeDemand] = useCompleteDemandMutation();
   const router = useRouter();
   
-  const handleDemandSuccess = async (id) => {
+  const handleDemandSuccess = (id, certNumber) => {
     setDemandId(id);
     setStatus('success');
     
-    try {
-      const res = await completeDemand({ demandId: id }).unwrap();
-      if (res.success) {
-        router.push(`/demand/success?id=${id}&cert=${res.certificateNumber}`);
+    // Slight delay for UI effect before redirecting
+    setTimeout(() => {
+      if (certNumber) {
+        router.push(`/demand/success?id=${id}&cert=${certNumber}`);
       } else {
         router.push(`/demand/success?id=${id}`);
       }
-    } catch (error) {
-      router.push(`/demand/success?id=${id}`);
-    }
+    }, 1500);
   };
 
   if (status === 'success') {

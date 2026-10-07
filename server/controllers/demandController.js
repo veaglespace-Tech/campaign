@@ -99,27 +99,6 @@ export const createDemand = asyncHandler(async (req, res) => {
 
 
 
-// @desc    Complete Demand (Without Donation or After Donation Init)
-// @route   POST /api/demands/complete
-// @access  Public
-export const completeDemand = asyncHandler(async (req, res) => {
-  const { demandId } = req.body;
-  
-  const demand = await prisma.demand.findUnique({
-    where: { id: parseInt(demandId) },
-    include: { certificates: true }
-  });
-
-  if (!demand) {
-    res.status(404);
-    throw new Error('Demand not found');
-  }
-
-  const certNumber = demand.certificates[0]?.certificateNumber || '';
-
-  res.json({ success: true, certificateNumber: certNumber });
-});
-
 // @desc    Verify Certificate
 // @route   GET /api/demands/verify/:certId
 // @access  Public

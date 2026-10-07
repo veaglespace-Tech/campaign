@@ -26,21 +26,6 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['Demand', 'Admin']
     }),
-    initDonation: builder.mutation({
-      query: (data) => ({
-        url: '/demands/donate/init',
-        method: 'POST',
-        body: data
-      })
-    }),
-    completeDemand: builder.mutation({
-      query: (data) => ({
-        url: '/demands/complete',
-        method: 'POST',
-        body: data
-      }),
-      invalidatesTags: ['Demand', 'Admin']
-    }),
     verifyCertificate: builder.query({
       query: (certId) => `/demands/verify/${certId}`
     }),
@@ -110,8 +95,6 @@ export const apiSlice = createApi({
 export const {
   useGetCampaignsQuery,
   useCreateDemandMutation,
-  useInitDonationMutation,
-  useCompleteDemandMutation,
   useVerifyCertificateQuery,
   useAdminLoginMutation,
   useAdminVerifyOtpMutation,
