@@ -62,16 +62,16 @@ export default function Home() {
 
           {/* Glassmorphism Stats Card */}
           {data?.stats && (
-            <div className="animate-fade-in-up-delay-5 mt-20 mx-auto max-w-lg bg-black/40 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_20px_60px_rgba(220,38,38,0.15)] relative overflow-hidden group hover:border-red-500/50 transition-colors duration-500">
+            <div className="animate-fade-in-up-delay-5 mt-20 mx-auto max-w-lg bg-white/70 backdrop-blur-2xl border border-white/60 rounded-[2.5rem] p-10 shadow-[0_20px_60px_rgba(220,38,38,0.15)] relative overflow-hidden group hover:border-red-200 transition-colors duration-500">
               <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-600 via-orange-500 to-red-600" />
               
-              <div className="flex flex-col items-center justify-center space-y-3 hover:scale-105 transition-transform duration-300">
-                <span className="text-6xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400 tracking-tight drop-shadow-lg">
+              <div className="flex flex-col items-center justify-center space-y-4 hover:scale-105 transition-transform duration-300">
+                <span className="text-6xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-red-600 to-red-800 tracking-tight drop-shadow-sm">
                   {data.stats.totalDemands.toLocaleString()}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                  <span className="text-sm sm:text-base font-bold text-red-400 uppercase tracking-[0.2em] text-center">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)]" />
+                  <span className="text-sm sm:text-base font-bold text-gray-800 uppercase tracking-[0.25em] text-center">
                     Total Supporters
                   </span>
                 </div>
