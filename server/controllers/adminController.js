@@ -10,15 +10,6 @@ import { config } from '../config/index.js';
 export const getStats = asyncHandler(async (req, res) => {
   const totalDemands = await prisma.demand.count();
   
-  const totalDonations = await prisma.donation.aggregate({
-    where: { paymentStatus: 'success' },
-    _sum: { amount: true }
-  });
-  
-  const donorsCount = await prisma.donation.count({
-    where: { paymentStatus: 'success' }
-  });
-  
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -26,20 +17,12 @@ export const getStats = asyncHandler(async (req, res) => {
     where: { demandDate: { gte: today } }
   });
 
-  const todayDonations = await prisma.donation.aggregate({
-    where: { paymentStatus: 'success', paymentDate: { gte: today } },
-    _sum: { amount: true }
-  });
-
   res.json({
     success: true,
     stats: {
       totalDemands,
-      totalDonations: totalDonations._sum.amount || 0,
-      donorsCount,
       certificatesGenerated: totalDemands,
-      todayDemands,
-      todayDonations: todayDonations._sum.amount || 0
+      todayDemands
     }
   });
 });
@@ -52,7 +35,6 @@ export const getDemands = asyncHandler(async (req, res) => {
     include: {
       user: true,
       certificates: true,
-      donations: true,
       campaign: true
     },
     orderBy: { demandDate: 'desc' }
