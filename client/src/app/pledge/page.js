@@ -3,9 +3,9 @@ import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { HeartHandshake, ShieldCheck, Flag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useGetConfigQuery } from '../../redux/api/apiSlice';
+import { useGetConfigQuery, useCompletePledgeMutation } from '../../redux/api/apiSlice';
 import PledgeForm from '../../components/pledge/PledgeForm';
-import DonationForm from '../../components/pledge/DonationForm';
+import { useRouter } from 'next/navigation';
 
 function PledgeContent() {
   const searchParams = useSearchParams();
@@ -17,9 +17,23 @@ function PledgeContent() {
   const [status, setStatus] = useState('idle'); // idle, success
   const [pledgeId, setPledgeId] = useState(null);
   
-  const handlePledgeSuccess = (id) => {
+  const [completePledge] = useCompletePledgeMutation();
+  const router = useRouter();
+  
+  const handlePledgeSuccess = async (id) => {
     setPledgeId(id);
     setStatus('success');
+    
+    try {
+      const res = await completePledge({ pledgeId: id }).unwrap();
+      if (res.success) {
+        router.push(`/pledge/success?id=${id}&cert=${res.certificateNumber}`);
+      } else {
+        router.push(`/pledge/success?id=${id}`);
+      }
+    } catch (error) {
+      router.push(`/pledge/success?id=${id}`);
+    }
   };
 
   if (status === 'success') {
@@ -31,28 +45,10 @@ function PledgeContent() {
           <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-black/80 to-red-950/90 mix-blend-multiply"></div>
         </div>
         
-        <div className="max-w-xl w-full bg-black/40 backdrop-blur-3xl rounded-[2rem] shadow-[0_8px_40px_rgb(0,0,0,0.5)] overflow-hidden border border-white/10 animate-scale-in relative z-10">
-          {/* Header */}
-          <div className="bg-red-600/20 backdrop-blur-md p-10 text-center text-white relative overflow-hidden border-b border-white/10">
-            <HeartHandshake className="mx-auto h-16 w-16 mb-4 relative z-10 text-red-400 drop-shadow-[0_0_15px_rgba(248,113,113,0.5)]" />
-            <h2 className="text-3xl font-black tracking-tight mb-2 relative z-10 text-white drop-shadow-md">Thank You for Your Support</h2>
-            <p className="text-gray-300 font-medium relative z-10">Your support has been recorded. You can optionally support our on-ground protest initiatives.</p>
-          </div>
-          
-          <div className="p-8">
-            {/* Donation Transparency Box */}
-            <div className="mb-8 p-6 bg-white/5 border border-white/10 rounded-2xl flex gap-4 backdrop-blur-md">
-              <ShieldCheck className="text-red-400 shrink-0 w-8 h-8 drop-shadow-[0_0_10px_rgba(248,113,113,0.4)]" />
-              <div>
-                <h4 className="font-bold text-white mb-1 tracking-tight">How your donation helps</h4>
-                <p className="text-sm text-gray-300 leading-relaxed font-normal">
-                  {siteConfig.donationUsage || 'Your donations will be utilized for conducting the on-ground protests, legal fees, and student support.'}
-                </p>
-              </div>
-            </div>
-            
-            <DonationForm pledgeId={pledgeId} />
-          </div>
+        <div className="max-w-md w-full bg-black/40 backdrop-blur-3xl rounded-[2rem] shadow-[0_8px_40px_rgb(0,0,0,0.5)] overflow-hidden border border-white/10 animate-scale-in relative z-10 flex flex-col items-center justify-center p-12 text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-4 border-red-500 mb-8"></div>
+          <h2 className="text-2xl font-black text-white mb-3 tracking-tight">Generating Certificate...</h2>
+          <p className="text-gray-400 text-sm">Please wait while we prepare your official MPSC Protest Support Certificate.</p>
         </div>
       </div>
     );
