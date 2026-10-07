@@ -6,19 +6,19 @@ const prisma = new PrismaClient();
 async function main() {
   // 1. Seed Campaign
   let campaign = await prisma.campaign.findFirst({
-    where: { name: 'Say No to Drugs' }
+    where: { name: 'MPSC Students Protest' }
   });
 
   if (!campaign) {
     campaign = await prisma.campaign.create({
       data: {
-        name: 'Say No to Drugs',
-        description: 'Take the Pledge. Spread Awareness. Build a Drug-Free Society.',
+        name: 'MPSC Students Protest',
+        description: 'Stand united with the students of Maharashtra. Register your support, join the protest to demand fair MPSC exams, and secure your official support certificate today.',
         donationEnabled: true,
         status: 'active'
       }
     });
-    console.log('Campaign Say No to Drugs created.');
+    console.log('Campaign MPSC Protest created.');
   } else {
     console.log('Campaign already exists.');
   }
@@ -48,9 +48,9 @@ async function main() {
 
   // 3. Seed SiteConfig
   const existingConfig = await prisma.siteConfig.findUnique({ where: { id: 1 } });
-  const english = "I pledge to say NO to drugs and substance abuse. I commit to making healthy choices, spreading awareness in my community, and supporting those in need to build a stronger, safer, and drug-free society. Together, we can make a difference.";
-  const hindi = "मैं नशीली दवाओं और मादक पदार्थों के सेवन को ना कहने की प्रतिज्ञा करता हूँ। मैं स्वस्थ विकल्प चुनने, अपने समुदाय में जागरूकता फैलाने और एक मजबूत, सुरक्षित और नशामुक्त समाज के निर्माण के लिए जरूरतमंद लोगों का समर्थन करने के लिए प्रतिबद्ध हूँ। साथ मिलकर, हम एक बदलाव ला सकते हैं।";
-  const marathi = "मी अमली पदार्थ आणि व्यसनांना नाही म्हणण्याची प्रतिज्ञा करतो. मी निरोगी पर्याय निवडण्यास, माझ्या समाजात जागरूकता पसरवण्यास आणि एक मजबूत, सुरक्षित आणि व्यसनमुक्त समाज घडवण्यासाठी गरजूंना पाठिंबा देण्यास वचनबद्ध आहे. आपण एकत्र येऊन नक्कीच बदल घडवू शकतो.";
+  const english = "I pledge my full support to the MPSC Students Protest. I stand for a fair, transparent, and timely examination process.";
+  const hindi = "मैं एमपीएससी छात्रों के विरोध को अपना पूर्ण समर्थन देने की प्रतिज्ञा करता हूँ। मैं एक निष्पक्ष, पारदर्शी और समय पर परीक्षा प्रक्रिया के पक्ष में खड़ा हूँ।";
+  const marathi = "मी एमपीएससी विद्यार्थ्यांच्या आंदोलनाला माझा पूर्ण पाठिंबा देण्याची प्रतिज्ञा करतो. मी न्याय्य, पारदर्शक आणि वेळेवर परीक्षा प्रक्रियेच्या बाजूने उभा आहे.";
   
   if (!existingConfig) {
     await prisma.siteConfig.create({

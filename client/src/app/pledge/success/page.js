@@ -11,43 +11,39 @@ function SuccessContent() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
   return (
-    <div className="min-h-screen bg-[#FFF9F2] flex items-center justify-center p-4 relative">
-      {/* Tricolor top bar */}
-      <div className="fixed top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#FF9933] via-white to-[#138808] z-50" />
-
+    <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-4 relative pt-20 pb-16">
+      
       {/* Subtle background glows */}
-      <div className="absolute top-20 right-20 w-64 h-64 bg-[#FF9933]/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-20 left-20 w-64 h-64 bg-[#138808]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-20 right-20 w-64 h-64 bg-red-600/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-20 left-20 w-64 h-64 bg-orange-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="max-w-md w-full bg-white p-8 rounded-3xl shadow-2xl shadow-[#FF9933]/10 text-center border border-gray-200 relative overflow-hidden animate-scale-in">
-        {/* Tricolor top accent */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF9933] via-white to-[#138808]" />
+      <div className="max-w-md w-full bg-white p-10 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.05)] text-center border border-gray-100 relative overflow-hidden animate-scale-in">
+        
+        {/* Top accent */}
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-red-600 via-red-500 to-orange-500" />
 
-        {/* Background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-[#138808]/5 blur-3xl rounded-full"></div>
-
-        <div className="w-20 h-20 bg-[#138808]/10 border border-[#138808]/20 text-[#138808] rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_0_25px_-5px_rgba(19,136,8,0.3)]">
-          <CheckCircle2 size={40} />
+        <div className="w-24 h-24 bg-red-50 text-red-600 rounded-3xl flex items-center justify-center mx-auto mb-8 relative z-10 shadow-inner">
+          <CheckCircle2 size={48} strokeWidth={2.5} />
         </div>
-        <h1 className="text-3xl font-black mb-2 relative z-10 text-tricolor drop-shadow-[2px_2px_0_#1a1a1a]">Thank You!</h1>
-        <p className="text-[#4a4a4a] mb-2 relative z-10 leading-relaxed">
-          Your pledge has been recorded successfully. Together, we can build a drug-free India.
+        
+        <h1 className="text-3xl font-black mb-4 relative z-10 text-gray-900 tracking-tight">Thank You!</h1>
+        <p className="text-gray-500 mb-8 relative z-10 leading-relaxed font-medium">
+          Your support has been recorded successfully. Together, we can ensure a fair, transparent, and timely examination system.
         </p>
-        <p className="text-lg font-bold text-tricolor relative z-10 mb-8"> Jai Hind!</p>
 
         {certId && (
-          <div className="bg-[#FFF9F2] p-6 rounded-2xl border border-[#FF9933]/15 mb-8 relative z-10">
-            <div className="w-12 h-12 bg-[#FF9933]/15 text-[#FF9933] rounded-xl flex items-center justify-center mx-auto mb-3">
+          <div className="bg-[#FAFAFA] p-6 rounded-[1.5rem] border border-gray-200 mb-10 relative z-10 shadow-sm">
+            <div className="w-12 h-12 bg-white text-gray-900 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-100">
               <FileText size={24} />
             </div>
-            <p className="text-sm text-[#6b7280] mb-1">Your Certificate ID</p>
-            <p className="font-mono font-bold text-xl text-[#1a1a1a] tracking-wider">{certId}</p>
+            <p className="text-sm text-gray-500 mb-1 font-bold">Your Certificate ID</p>
+            <p className="font-black text-2xl text-gray-900 tracking-wider mb-2">{certId}</p>
             <a
               href={`${apiUrl}/pledges/download/${certId}`}
               download
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-[#FF9933]/10 text-[#FF9933] hover:bg-[#FF9933] hover:text-white font-bold py-2.5 rounded-lg border border-[#FF9933]/20 transition-all"
+              className="mt-4 w-full flex items-center justify-center gap-2.5 bg-white text-gray-900 hover:text-red-600 font-bold py-3.5 rounded-xl border border-gray-200 hover:border-red-200 hover:bg-red-50 transition-all duration-300 shadow-sm"
             >
               <FileText size={18} />
               Download Certificate
@@ -57,7 +53,7 @@ function SuccessContent() {
 
         <Link
           href="/"
-          className="relative z-10 inline-flex items-center justify-center w-full bg-[#FF9933] text-white font-bold py-4 rounded-xl shadow-[0_0_25px_-5px_rgba(255,153,51,0.4)] hover:bg-[#E6852E] hover:-translate-y-0.5 transition-all"
+          className="relative z-10 flex items-center justify-center w-full bg-[#0A0A0A] text-white font-bold py-4 rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:bg-[#1A1A1A] hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
         >
           Return Home
           <ArrowRight className="ml-2 h-5 w-5" />
@@ -69,7 +65,7 @@ function SuccessContent() {
 
 export default function SuccessPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#FFF9F2] flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF9933]"></div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div></div>}>
       <SuccessContent />
     </Suspense>
   );

@@ -12,19 +12,17 @@ const transporter = nodemailer.createTransport({
 export const sendCertificateEmail = async (toEmail, name, pledgeId, pdfBuffer) => {
   try {
     const mailOptions = {
-      from: `"Say No To Drugs Campaign" <${config.email.user}>`,
+      from: `"MPSC Protest Support" <${config.email.user}>`,
       to: toEmail,
-      subject: 'Your Say No to Drugs Pledge Certificate',
+      subject: 'Your MPSC Protest Support Certificate',
       html: `
         <div style="font-family: Arial, sans-serif; color: #333;">
           <h2>Dear ${name},</h2>
-          <p>Thank you for taking the Say No to Drugs Pledge.</p>
-          <p>Your commitment helps spread awareness and encourages a healthier, safer and drug-free society.</p>
-          <p><strong>Pledge ID:</strong> ${pledgeId}</p>
-          <p>Your digital pledge certificate is attached.</p>
-          <p>Thank you for being part of the campaign.</p>
-          <br>
-          <p>Say No to Drugs. Say Yes to Life.</p>
+          <p>Thank you for registering your support for the MPSC Students Protest.</p>
+          <p>Your commitment helps amplify the voice of lakhs of students demanding a fair, transparent, and timely examination process.</p>
+          <p><strong>Support ID:</strong> ${pledgeId}</p>
+          <p>Your official support certificate is attached.</p>
+          <p>Stand United. Demand Justice.</p>
         </div>
       `,
       attachments: [
@@ -48,7 +46,7 @@ export const sendCertificateEmail = async (toEmail, name, pledgeId, pdfBuffer) =
 export const sendOtpEmail = async (toEmail, name, otp) => {
   try {
     const mailOptions = {
-      from: `"Say No To Drugs Campaign" <${config.email.user}>`,
+      from: `"MPSC Protest Support" <${config.email.user}>`,
       to: toEmail,
       subject: 'Your Admin Login OTP',
       html: `

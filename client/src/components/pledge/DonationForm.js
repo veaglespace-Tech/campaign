@@ -65,14 +65,14 @@ export default function DonationForm({ pledgeId }) {
 
   return (
     <div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
         {[100, 250, 500, 1000].map(amt => (
           <button
             key={amt}
             onClick={() => { setDonationAmount(amt); setCustomAmount(''); }}
-            className={`py-3 px-4 rounded-xl font-bold border-2 transition-all ${donationAmount === amt && !customAmount
-                ? 'border-red-500 bg-red-50 text-red-600 shadow-sm'
-                : 'border-gray-200 text-gray-600 hover:border-red-300 bg-white'
+            className={`py-3 px-4 rounded-xl font-bold border-2 transition-all duration-300 ${donationAmount === amt && !customAmount
+                ? 'border-[#0A0A0A] bg-[#0A0A0A] text-white shadow-md'
+                : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:text-[#0A0A0A] bg-white'
               }`}
           >
             ₹{amt}
@@ -80,13 +80,13 @@ export default function DonationForm({ pledgeId }) {
         ))}
       </div>
 
-      <div className="mb-8">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Other Amount (₹)</label>
+      <div className="mb-10">
+        <label className="block text-sm font-bold text-gray-700 mb-2">Other Amount (₹)</label>
         <input
           type="number"
           value={customAmount}
           onChange={(e) => { setCustomAmount(e.target.value); setDonationAmount(0); }}
-          className="w-full rounded-xl bg-gray-50 border-gray-200 px-4 py-3 border focus:border-red-500 outline-none text-gray-900"
+          className="w-full rounded-xl bg-[#FAFAFA] border-gray-200 px-4 py-3.5 border focus:bg-white focus:border-[#0A0A0A] focus:ring-1 focus:ring-[#0A0A0A] outline-none text-gray-900 transition-all font-medium"
           placeholder="Enter custom amount"
         />
       </div>
@@ -95,14 +95,14 @@ export default function DonationForm({ pledgeId }) {
         <button
           onClick={handleDonate}
           disabled={isDonating || isCompleting}
-          className="w-full bg-red-600 text-white font-bold py-4 rounded-xl shadow-[0_0_25px_-5px_rgba(239,68,68,0.4)] hover:bg-red-700 hover:-translate-y-0.5 transition-all disabled:opacity-70"
+          className="w-full flex justify-center py-4 px-6 rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.15)] text-lg font-bold text-white bg-[#0A0A0A] hover:bg-[#1A1A1A] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 outline-none disabled:opacity-50 disabled:hover:translate-y-0 disabled:active:scale-100 disabled:cursor-not-allowed disabled:shadow-none"
         >
           {isDonating ? 'PROCESSING...' : 'SUPPORT CAMPAIGN'}
         </button>
         <button
           onClick={handleNoThanks}
           disabled={isCompleting || isDonating}
-          className="w-full bg-gray-50 text-gray-600 font-medium py-4 rounded-xl border border-gray-200 hover:bg-gray-100 hover:text-gray-900 transition-all disabled:opacity-70"
+          className="w-full flex justify-center py-4 px-6 rounded-full bg-white text-gray-500 font-semibold border border-gray-200 hover:border-gray-300 hover:text-gray-900 hover:bg-gray-50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isCompleting ? 'PLEASE WAIT...' : 'NO, THANK YOU'}
         </button>
