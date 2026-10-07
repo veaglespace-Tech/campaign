@@ -76,63 +76,74 @@ export const generateCertificate = async (
   ]);
 
   // ============================================================
-  // LOAD CERTIFICATE TEMPLATE
+  // CERTIFICATE BACKGROUND & BORDERS
   // ============================================================
 
-  const templatePath = path.join(
-    __dirname,
-    '../assets/certificate_full.jpg'
-  );
+  // Background
+  page.drawRectangle({
+    x: 0,
+    y: 0,
+    width,
+    height,
+    color: rgb(0.98, 0.98, 0.98),
+  });
 
-  try {
-    if (!fs.existsSync(templatePath)) {
-      throw new Error(
-        `Certificate template not found: ${templatePath}`
-      );
-    }
+  // Outer Border
+  page.drawRectangle({
+    x: 20,
+    y: 20,
+    width: width - 40,
+    height: height - 40,
+    borderColor: rgb(0.88, 0.11, 0.28), // Crimson
+    borderWidth: 4,
+    color: rgb(1, 1, 1),
+  });
 
-    const templateBytes = fs.readFileSync(
-      templatePath
-    );
+  // Inner Border
+  page.drawRectangle({
+    x: 30,
+    y: 30,
+    width: width - 60,
+    height: height - 60,
+    borderColor: rgb(0.95, 0.6, 0.2), // Orange
+    borderWidth: 1,
+  });
 
-    const templateImage =
-      await pdfDoc.embedJpg(templateBytes);
+  // ============================================================
+  // TITLE
+  // ============================================================
+  const titleText = "CERTIFICATE OF SUPPORT";
+  const titleSize = 42;
+  const titleWidth = timesRomanBoldFont.widthOfTextAtSize(titleText, titleSize);
+  
+  page.drawText(titleText, {
+    x: width / 2 - titleWidth / 2,
+    y: height - 120,
+    size: titleSize,
+    font: timesRomanBoldFont,
+    color: rgb(0.05, 0.05, 0.05),
+  });
 
-    page.drawImage(templateImage, {
-      x: 0,
-      y: 0,
-      width,
-      height,
-    });
-  } catch (error) {
-    console.error(
-      'Template image could not be loaded:',
-      error
-    );
-
-    page.drawRectangle({
-      x: 0,
-      y: 0,
-      width,
-      height,
-      color: rgb(
-        0.95,
-        0.95,
-        0.95
-      ),
-    });
-  }
+  const subtitleText = "MPSC STUDENTS PROTEST";
+  const subtitleSize = 24;
+  const subtitleWidth = timesRomanBoldFont.widthOfTextAtSize(subtitleText, subtitleSize);
+  
+  page.drawText(subtitleText, {
+    x: width / 2 - subtitleWidth / 2,
+    y: height - 160,
+    size: subtitleSize,
+    font: timesRomanBoldFont,
+    color: rgb(0.88, 0.11, 0.28),
+  });
 
   // ============================================================
   // CERTIFICATE AREA
   // ============================================================
 
-  const CERT_LEFT = 400;
-  const CERT_RIGHT = 1015;
+  const CERT_LEFT = 100;
+  const CERT_RIGHT = width - 100;
 
-  const CERT_CENTER_X =
-    CERT_LEFT +
-    (CERT_RIGHT - CERT_LEFT) / 2;
+  const CERT_CENTER_X = width / 2;
 
   // ============================================================
   // NAME
@@ -181,11 +192,25 @@ export const generateCertificate = async (
     y: NAME_Y,
     size: nameSize,
     font: nameFont,
-    color: rgb(
-      0.08,
-      0.16,
-      0.28
-    ),
+    color: rgb(0.05, 0.05, 0.05),
+  });
+  
+  // Underline for name
+  page.drawLine({
+    start: { x: width / 2 - 250, y: NAME_Y - 10 },
+    end: { x: width / 2 + 250, y: NAME_Y - 10 },
+    thickness: 1,
+    color: rgb(0.8, 0.8, 0.8),
+  });
+  
+  const presentedToText = "Proudly presented to";
+  const pWidth = timesRomanFont.widthOfTextAtSize(presentedToText, 16);
+  page.drawText(presentedToText, {
+    x: width / 2 - pWidth / 2,
+    y: NAME_Y + 40,
+    size: 16,
+    font: timesRomanFont,
+    color: rgb(0.4, 0.4, 0.4),
   });
 
   // ============================================================
@@ -200,25 +225,20 @@ export const generateCertificate = async (
   if (language === 'marathi') demandsText = pledgeMarathi;
   else if (language === 'hindi') demandsText = pledgeHindi;
 
-  // Blank out the old pre-printed pledge text
-  page.drawRectangle({
-    x: 410,
-    y: 170,
-    width: 580,
-    height: 230,
-    color: rgb(1, 1, 1), 
-  });
-
-  let currentY = 380;
-  page.drawText(language === 'marathi' ? 'आमच्या मागण्या:' : (language === 'hindi' ? 'हमारी मांगें:' : 'Our Demands:'), {
-    x: 420,
+  let currentY = NAME_Y - 60;
+  
+  const demandsTitle = language === 'marathi' ? 'आमच्या मागण्या:' : (language === 'hindi' ? 'हमारी मांगें:' : 'Our Demands:');
+  const dTitleWidth = timesRomanBoldFont.widthOfTextAtSize(demandsTitle, 16);
+  
+  page.drawText(demandsTitle, {
+    x: width / 2 - dTitleWidth / 2,
     y: currentY,
-    size: 14,
+    size: 16,
     font: timesRomanBoldFont,
-    color: rgb(0.08, 0.16, 0.28),
+    color: rgb(0.88, 0.11, 0.28),
   });
   
-  currentY -= 25;
+  currentY -= 30;
 
   const demandsLines = demandsText.split('\n').filter(line => line.trim() !== '');
   for (const line of demandsLines) {
@@ -226,18 +246,20 @@ export const generateCertificate = async (
     let currentLine = '';
     for (const word of words) {
       const testLine = currentLine === '' ? word : currentLine + ' ' + word;
-      const testWidth = nameFont.widthOfTextAtSize(testLine, 11);
-      if (testWidth > 560) {
-        page.drawText(currentLine, { x: 420, y: currentY, size: 11, font: nameFont, color: rgb(0.2, 0.2, 0.2) });
+      const testWidth = nameFont.widthOfTextAtSize(testLine, 14);
+      if (testWidth > 700) {
+        const lw = nameFont.widthOfTextAtSize(currentLine, 14);
+        page.drawText(currentLine, { x: width / 2 - lw / 2, y: currentY, size: 14, font: nameFont, color: rgb(0.2, 0.2, 0.2) });
         currentLine = word;
-        currentY -= 16;
+        currentY -= 20;
       } else {
         currentLine = testLine;
       }
     }
     if (currentLine !== '') {
-      page.drawText(currentLine, { x: 420, y: currentY, size: 11, font: nameFont, color: rgb(0.2, 0.2, 0.2) });
-      currentY -= 22;
+      const lw = nameFont.widthOfTextAtSize(currentLine, 14);
+      page.drawText(currentLine, { x: width / 2 - lw / 2, y: currentY, size: 14, font: nameFont, color: rgb(0.2, 0.2, 0.2) });
+      currentY -= 28;
     }
   }
 
@@ -303,9 +325,9 @@ export const generateCertificate = async (
   //
   // ============================================================
 
-  const QR_X = 443;
-  const QR_Y = 82;
-  const QR_SIZE = 65;
+  const QR_SIZE = 80;
+  const QR_X = width / 2 - QR_SIZE / 2;
+  const QR_Y = 60;
 
   page.drawImage(qrImage, {
     x: QR_X,
@@ -345,21 +367,11 @@ export const generateCertificate = async (
   // ============================================================
 
   page.drawText(dateText, {
-    x:
-      qrCenterX -
-      dateWidth / 2,
-
-    y: QR_Y - 13,
-
+    x: 100,
+    y: 80,
     size: META_FONT_SIZE,
-
     font: timesRomanBoldFont,
-
-    color: rgb(
-      0.08,
-      0.16,
-      0.28
-    ),
+    color: rgb(0.4, 0.4, 0.4),
   });
 
   // ============================================================
@@ -367,21 +379,11 @@ export const generateCertificate = async (
   // ============================================================
 
   page.drawText(idText, {
-    x:
-      qrCenterX -
-      idWidth / 2,
-
-    y: QR_Y - 26,
-
+    x: width - 100 - idWidth,
+    y: 80,
     size: META_FONT_SIZE,
-
     font: timesRomanBoldFont,
-
-    color: rgb(
-      0.08,
-      0.16,
-      0.28
-    ),
+    color: rgb(0.4, 0.4, 0.4),
   });
 
   // ============================================================
