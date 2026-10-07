@@ -97,7 +97,7 @@ export default function PledgeForm({ campaignId, siteConfig, onSuccess }) {
 
           <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-[1.5rem] border border-white/10 p-6 mb-8 flex flex-col shadow-inner">
             <div className="flex-1 overflow-y-auto pr-3 custom-scrollbar text-left space-y-4" style={{ maxHeight: '350px' }}>
-              <ul className="list-decimal pl-5 text-sm text-gray-300 space-y-4 font-medium">
+              <ul className="list-none pl-0 text-sm text-gray-300 space-y-4 font-medium">
                 {getPledgePoints(language, siteConfig).map((point, idx) => (
                   <li key={idx} className="leading-relaxed">{point}</li>
                 ))}
