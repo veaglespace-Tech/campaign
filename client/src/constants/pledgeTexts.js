@@ -13,10 +13,11 @@ export const defaultPledgeMarathi = [
 ];
 
 export const defaultPledgeEnglish = [
-  "1. We demand that the MPSC exams be conducted fairly and transparently without any delays.",
-  "2. We strongly demand the immediate announcement of the exam schedule for Agriculture Services and other exams.",
-  "3. We demand that the government immediately fill all vacant positions in various departments.",
-  "4. We stand united for the rights of all students and demand justice."
+  "1. Institutional Accountability: Immediate resignation of the MPSC Chairman and secretary; a comprehensive judicial inquiry into the commission's functioning.",
+  "2. Examination System Reforms: A definitive decision on the exam pattern (Objective vs Descriptive) and discontinuation of online evaluation systems. Complete abolition of normalization.",
+  "3. Recruitment & Vacancies: Immediate declaration and recruitment drive for over 70,000 vacant posts through MPSC only, stopping all private outsourcing.",
+  "4. Age Relaxations & Eligibility: An immediate increase in the upper age limit for PSI recruitment and removal of restrictive criteria like TET for specific roles.",
+  "5. Financial & Administrative Ease: Implementation of a continuous examination card system (like Rajasthan) and massive reduction of examination fees for struggling students."
 ];
 
 export const getPledgePoints = (language, siteConfig) => {

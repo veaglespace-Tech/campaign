@@ -221,13 +221,11 @@ export const generateCertificate = async (
   const pledgeMarathi = config?.pledgeMarathi || `१. एमपीएससीच्या परीक्षा वेळेवर आणि पारदर्शकपणे घेण्यात याव्यात अशी आमची मागणी आहे.\n२. कृषी सेवा आणि इतर परीक्षांचे वेळापत्रक त्वरित जाहीर करण्यात यावे.\n३. शासनाने विविध विभागांतील सर्व रिक्त पदे लवकरात लवकर भरावीत.\n४. विद्यार्थ्यांच्या हक्कासाठी आम्ही सर्वजण एकत्र उभे आहोत आणि न्यायाची मागणी करत आहोत.`;
   const pledgeHindi = config?.pledgeHindi || `१. हमारी मांग है कि एमपीएससी की परीक्षाएं समय पर और पारदर्शी तरीके से आयोजित की जाएं।\n२. कृषि सेवा और अन्य परीक्षाओं का कार्यक्रम तुरंत घोषित किया जाए।\n३. सरकार विभिन्न विभागों में सभी रिक्त पदों को जल्द से जल्द भरे।\n४. हम छात्रों के अधिकारों के लिए एकजुट हैं और न्याय की मांग करते हैं।`;
 
-  let demandsText = pledgeEnglish;
-  if (language === 'marathi') demandsText = pledgeMarathi;
-  else if (language === 'hindi') demandsText = pledgeHindi;
+  let demandsText = pledgeEnglish; // Force English to prevent PDF unicode errors with indic scripts
 
-  let currentY = NAME_Y - 60;
+  let currentY = NAME_Y - 50;
   
-  const demandsTitle = language === 'marathi' ? 'आमच्या मागण्या:' : (language === 'hindi' ? 'हमारी मांगें:' : 'Our Demands:');
+  const demandsTitle = 'Our Demands:';
   const dTitleWidth = timesRomanBoldFont.widthOfTextAtSize(demandsTitle, 16);
   
   page.drawText(demandsTitle, {
@@ -238,7 +236,7 @@ export const generateCertificate = async (
     color: rgb(0.88, 0.11, 0.28),
   });
   
-  currentY -= 30;
+  currentY -= 25;
 
   const demandsLines = demandsText.split('\n').filter(line => line.trim() !== '');
   for (const line of demandsLines) {
@@ -246,20 +244,20 @@ export const generateCertificate = async (
     let currentLine = '';
     for (const word of words) {
       const testLine = currentLine === '' ? word : currentLine + ' ' + word;
-      const testWidth = nameFont.widthOfTextAtSize(testLine, 14);
-      if (testWidth > 700) {
-        const lw = nameFont.widthOfTextAtSize(currentLine, 14);
-        page.drawText(currentLine, { x: width / 2 - lw / 2, y: currentY, size: 14, font: nameFont, color: rgb(0.2, 0.2, 0.2) });
+      const testWidth = nameFont.widthOfTextAtSize(testLine, 12); // Reduced from 14 to 12
+      if (testWidth > 750) { // Increased wrap width from 700 to 750
+        const lw = nameFont.widthOfTextAtSize(currentLine, 12);
+        page.drawText(currentLine, { x: width / 2 - lw / 2, y: currentY, size: 12, font: nameFont, color: rgb(0.2, 0.2, 0.2) });
         currentLine = word;
-        currentY -= 20;
+        currentY -= 16; // Reduced spacing
       } else {
         currentLine = testLine;
       }
     }
     if (currentLine !== '') {
-      const lw = nameFont.widthOfTextAtSize(currentLine, 14);
-      page.drawText(currentLine, { x: width / 2 - lw / 2, y: currentY, size: 14, font: nameFont, color: rgb(0.2, 0.2, 0.2) });
-      currentY -= 28;
+      const lw = nameFont.widthOfTextAtSize(currentLine, 12);
+      page.drawText(currentLine, { x: width / 2 - lw / 2, y: currentY, size: 12, font: nameFont, color: rgb(0.2, 0.2, 0.2) });
+      currentY -= 22; // Reduced paragraph spacing
     }
   }
 
