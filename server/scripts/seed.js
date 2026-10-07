@@ -31,7 +31,7 @@ async function main() {
 
   if (!existingAdmin) {
     const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash('Veagle@123', salt);
+    const passwordHash = await bcrypt.hash('Test@123', salt);
 
     await prisma.adminUser.create({
       data: {
