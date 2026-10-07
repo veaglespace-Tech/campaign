@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Languages, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { useCreateDemandMutation } from '../../redux/api/apiSlice';
 import { getDemandPoints } from '../../constants/demandTexts';
 
@@ -14,7 +14,6 @@ export default function DemandForm({ campaignId, siteConfig, onSuccess }) {
     consent: false
   });
   
-  const [language, setLanguage] = useState('english');
   const [errorStatus, setErrorStatus] = useState(false);
   
   const [createDemand, { isLoading: isCreating }] = useCreateDemandMutation();
@@ -36,7 +35,7 @@ export default function DemandForm({ campaignId, siteConfig, onSuccess }) {
       const res = await createDemand({
         ...formData,
         campaignId,
-        language,
+        language: 'english',
         demandText: '9 points standard demand' // Storing a summary since the full text is huge
       }).unwrap();
       
@@ -67,38 +66,10 @@ export default function DemandForm({ campaignId, siteConfig, onSuccess }) {
         </div>
         
         <div className="p-8 sm:p-10 flex-1 flex flex-col">
-          {/* Language Selector */}
-          <div className="p-5 bg-white/5 border border-white/10 rounded-[1.5rem] mb-8 backdrop-blur-sm">
-            <div className="flex items-center gap-2 mb-4">
-              <Languages className="text-red-400 w-5 h-5" />
-              <label className="text-sm font-bold text-gray-200 tracking-wide">Select Language</label>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              {[
-                { id: 'english', label: 'English' },
-                { id: 'hindi', label: 'हिन्दी' },
-                { id: 'marathi', label: 'मराठी' }
-              ].map(lang => (
-                <button
-                  key={lang.id}
-                  type="button"
-                  onClick={() => setLanguage(lang.id)}
-                  className={`py-2 sm:py-2.5 rounded-xl font-semibold border text-xs sm:text-sm transition-all duration-300 ${
-                    language === lang.id 
-                    ? 'bg-red-600 border-red-500 text-white shadow-[0_0_15px_rgba(220,38,38,0.4)]' 
-                    : 'bg-white/5 border-white/10 text-gray-400 hover:border-white/30 hover:text-white'
-                  }`}
-                >
-                  {lang.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-[1.5rem] border border-white/10 p-6 mb-8 flex flex-col shadow-inner">
             <div className="flex-1 overflow-y-auto pr-3 custom-scrollbar text-left space-y-4" style={{ maxHeight: '350px' }}>
               <ul className="list-none pl-0 text-sm text-gray-300 space-y-4 font-medium">
-                {getDemandPoints(language, siteConfig).map((point, idx) => (
+                {getDemandPoints('english', siteConfig).map((point, idx) => (
                   <li key={idx} className="leading-relaxed">{point}</li>
                 ))}
               </ul>
