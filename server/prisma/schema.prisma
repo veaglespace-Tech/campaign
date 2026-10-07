@@ -80,8 +80,6 @@ model AdminUser {
 model SiteConfig {
   id                Int      @id @default(1)
   demandEnglish     String?  @db.Text
-  demandHindi       String?  @db.Text
-  demandMarathi     String?  @db.Text
   certificateFormat String?  @db.Text
   updatedAt         DateTime @default(now()) @updatedAt
 

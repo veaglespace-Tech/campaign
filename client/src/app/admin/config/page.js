@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Save, Languages, Shield, FileText } from 'lucide-react';
+import { Save, FileText, CheckCircle2 } from 'lucide-react';
 import { useGetConfigQuery, useUpdateConfigMutation } from '../../../redux/api/apiSlice';
-import { defaultDemandEnglish, defaultDemandHindi, defaultDemandMarathi } from '../../../constants/demandTexts';
+import { defaultDemandEnglish } from '../../../constants/demandTexts';
 
 export default function SiteConfigPage() {
   const { data, isLoading } = useGetConfigQuery();
@@ -10,8 +10,6 @@ export default function SiteConfigPage() {
   
   const [formData, setFormData] = useState({
     demandEnglish: '',
-    demandHindi: '',
-    demandMarathi: '',
     certificateFormat: ''
   });
 
@@ -21,8 +19,6 @@ export default function SiteConfigPage() {
     if (data?.config) {
       setFormData({
         demandEnglish: data.config.demandEnglish || defaultDemandEnglish.join('\n'),
-        demandHindi: data.config.demandHindi || defaultDemandHindi.join('\n'),
-        demandMarathi: data.config.demandMarathi || defaultDemandMarathi.join('\n'),
         certificateFormat: data.config.certificateFormat || 'This certificate is proudly presented to {name} for supporting the MPSC Protest Demands.'
       });
     }
@@ -86,41 +82,21 @@ export default function SiteConfigPage() {
           </div>
         </div>
 
-        {/* Multi-Language Demands */}
+        {/* Demands */}
         <div className="bg-black/40 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-orange-500" />
           <div className="p-6 border-b border-white/10 bg-white/5 flex items-center gap-3">
-            <Languages className="text-red-400" />
-            <h2 className="text-xl font-bold text-white">Demands (3 Languages)</h2>
+            <CheckCircle2 className="text-red-400" />
+            <h2 className="text-xl font-bold text-white">Demand Details</h2>
           </div>
           <div className="p-6 space-y-6">
             <div>
-              <label className="block text-sm font-bold text-gray-300 mb-2">English Demand (Enter one point per line)</label>
+              <label className="block text-sm font-bold text-gray-300 mb-2">Demand (Enter one point per line)</label>
               <textarea
                 name="demandEnglish"
                 value={formData.demandEnglish}
                 onChange={handleChange}
-                rows="10"
-                className="block w-full px-4 py-3 border border-white/10 bg-white/5 rounded-xl text-white focus:ring-2 focus:ring-red-500 focus:bg-white/10 outline-none transition-all placeholder-gray-600"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-300 mb-2">Hindi Demand (हिन्दी) (Enter one point per line)</label>
-              <textarea
-                name="demandHindi"
-                value={formData.demandHindi}
-                onChange={handleChange}
-                rows="10"
-                className="block w-full px-4 py-3 border border-white/10 bg-white/5 rounded-xl text-white focus:ring-2 focus:ring-red-500 focus:bg-white/10 outline-none transition-all placeholder-gray-600"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-300 mb-2">Marathi Demand (मराठी) (Enter one point per line)</label>
-              <textarea
-                name="demandMarathi"
-                value={formData.demandMarathi}
-                onChange={handleChange}
-                rows="10"
+                rows="15"
                 className="block w-full px-4 py-3 border border-white/10 bg-white/5 rounded-xl text-white focus:ring-2 focus:ring-red-500 focus:bg-white/10 outline-none transition-all placeholder-gray-600"
               />
             </div>
