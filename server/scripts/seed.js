@@ -14,7 +14,6 @@ async function main() {
       data: {
         name: 'MPSC Students Protest',
         description: 'Stand united with the students of Maharashtra. Register your support, join the protest to demand fair MPSC exams, and secure your official support certificate today.',
-        donationEnabled: true,
         status: 'active'
       }
     });
@@ -58,8 +57,7 @@ async function main() {
         id: 1,
         pledgeEnglish: english,
         pledgeHindi: hindi,
-        pledgeMarathi: marathi,
-        donationUsage: "Your donations will be utilized for conducting De-addiction drives, supporting rehabilitation centers, and promoting Women Safety initiatives."
+        pledgeMarathi: marathi
       }
     });
     console.log("SiteConfig created.");

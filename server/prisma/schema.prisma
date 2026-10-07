@@ -27,7 +27,6 @@ model Campaign {
   description         String?  @db.Text
   logo                String?
   certificateTemplate String?
-  donationEnabled     Boolean  @default(true)
   status              String   @default("active") // active, inactive
   pledges             Pledge[]
 
@@ -46,7 +45,6 @@ model Pledge {
   user         User          @relation(fields: [userId], references: [id])
   campaign     Campaign      @relation(fields: [campaignId], references: [id])
   certificates Certificate[]
-  donations    Donation[]
 
   @@map("pledges")
 }
@@ -65,19 +63,6 @@ model Certificate {
   @@map("certificates")
 }
 
-model Donation {
-  id             Int       @id @default(autoincrement())
-  pledgeId       Int
-  amount         Float
-  transactionId  String?
-  paymentGateway String    @default("payu")
-  paymentStatus  String    @default("pending") // pending, success, failed
-  paymentDate    DateTime?
-
-  pledge Pledge @relation(fields: [pledgeId], references: [id])
-
-  @@map("donations")
-}
 
 model AdminUser {
   id           Int      @id @default(autoincrement())
@@ -94,7 +79,6 @@ model AdminUser {
 
 model SiteConfig {
   id                Int      @id @default(1)
-  donationUsage     String?  @db.Text
   pledgeEnglish     String?  @db.Text
   pledgeHindi       String?  @db.Text
   pledgeMarathi     String?  @db.Text

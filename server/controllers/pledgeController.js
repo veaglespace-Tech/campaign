@@ -41,7 +41,6 @@ export const createPledge = asyncHandler(async (req, res) => {
         data: {
           name: 'MPSC Protest Support',
           description: 'Register your support to demand fair MPSC exams. Join the movement.',
-          donationEnabled: true,
           status: 'active'
         }
       });
@@ -80,8 +79,8 @@ export const createPledge = asyncHandler(async (req, res) => {
   // Fetch SiteConfig for certificate generation
   let config = await prisma.siteConfig.findUnique({ where: { id: 1 } });
   
-  // Generate Certificate immediately after pledge
-  const certNumber = `SND-${new Date().getFullYear()}-${pledge.id.toString().padStart(6, '0')}`;
+  // Generate standard certificate number
+  const certNumber = `MPSC-${new Date().getFullYear()}-${pledge.id.toString().padStart(6, '0')}`;
   const dateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   const pdfBuffer = await generateCertificate(user.name, certNumber, dateStr, language, config);
 
@@ -98,98 +97,7 @@ export const createPledge = asyncHandler(async (req, res) => {
   res.json({ success: true, pledgeId: pledge.id, certificateNumber: certNumber, message: 'Pledge created successfully' });
 });
 
-// @desc    Generate PayU Hash for donation
-// @route   POST /api/pledges/donate/init
-// @access  Public
-export const initDonation = asyncHandler(async (req, res) => {
-  const { pledgeId, amount, productinfo = 'Donation' } = req.body;
 
-  const pledge = await prisma.pledge.findUnique({
-    where: { id: parseInt(pledgeId) },
-    include: { user: true }
-  });
-
-  if (!pledge) {
-    res.status(404);
-    throw new Error('Pledge not found');
-  }
-
-  const donation = await prisma.donation.create({
-    data: {
-      pledgeId: pledge.id,
-      amount: parseFloat(amount),
-      paymentStatus: 'pending'
-    }
-  });
-
-  const txnid = `TXN_${donation.id}_${Date.now()}`;
-
-  await prisma.donation.update({
-    where: { id: donation.id },
-    data: { transactionId: txnid }
-  });
-
-  const key = config.payu.key;
-  const salt = config.payu.salt;
-  const email = pledge.user.email;
-  const firstname = pledge.user.name;
-  const phone = pledge.user.mobile;
-  const surl = `${config.serverBaseUrl}/api/pledges/donate/success`;
-  const furl = `${config.serverBaseUrl}/api/pledges/donate/failure`;
-
-  const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${salt}`;
-  const hash = crypto.createHash('sha512').update(hashString).digest('hex');
-
-  res.json({
-    success: true,
-    payuData: { key, txnid, amount, productinfo, firstname, email, phone, surl, furl, hash, url: config.payu.baseUrl }
-  });
-});
-
-// @desc    PayU Success Callback
-// @route   POST /api/pledges/donate/success
-// @access  Public
-export const donationSuccess = asyncHandler(async (req, res) => {
-  const { txnid, status } = req.body;
-
-  const donation = await prisma.donation.findFirst({
-    where: { transactionId: txnid },
-    include: { pledge: { include: { user: true, certificates: true } } }
-  });
-
-  if (donation && status === 'success') {
-    await prisma.donation.update({
-      where: { id: donation.id },
-      data: { paymentStatus: 'success', paymentDate: new Date() }
-    });
-    const certNumber = donation.pledge.certificates[0]?.certificateNumber || '';
-    res.redirect(`${config.clientUrl}/pledge/success?id=${donation.pledgeId}&cert=${certNumber}`);
-  } else {
-    res.redirect(`${config.clientUrl}/pledge/failure`);
-  }
-});
-
-// @desc    PayU Failure Callback
-// @route   POST /api/pledges/donate/failure
-// @access  Public
-export const donationFailure = asyncHandler(async (req, res) => {
-  const { txnid } = req.body;
-  const donation = await prisma.donation.findFirst({ 
-    where: { transactionId: txnid },
-    include: { pledge: { include: { certificates: true } } } 
-  });
-  
-  if (donation) {
-    await prisma.donation.update({
-      where: { id: donation.id },
-      data: { paymentStatus: 'failed', paymentDate: new Date() }
-    });
-    const certNumber = donation.pledge.certificates[0]?.certificateNumber || '';
-    res.redirect(`${config.clientUrl}/pledge/success?id=${donation.pledgeId}&cert=${certNumber}`); // Still redirect to success page for pledge!
-  } else {
-    res.redirect(`${config.clientUrl}/pledge/failure`);
-  }
-});
 
 // @desc    Complete Pledge (Without Donation or After Donation Init)
 // @route   POST /api/pledges/complete
