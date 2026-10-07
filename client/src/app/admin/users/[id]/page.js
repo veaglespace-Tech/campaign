@@ -122,7 +122,6 @@ export default function UserDetailPage() {
           </div>
         </div>
 
-        </div>
       </div>
     </div>
   );
